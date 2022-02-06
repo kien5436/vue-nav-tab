@@ -1,35 +1,67 @@
 {
-  "name": "vue-pager",
-  "version": "0.1.0",
-  "private": true,
+  "name": "vue-nav-tab",
+  "version": "1.0.1",
+  "description": "Tab component for Vue.js project",
+  "author": "Phạm Trung Kiên",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "tailwind": "npx tailwindcss -i ./src/input.css -o ./src/vue-pager.css"
   },
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "files": [
+    "dist",
+    "types"
+  ],
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^3.0.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
-    "@typescript-eslint/eslint-plugin": "^4.18.0",
-    "@typescript-eslint/parser": "^4.18.0",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-typescript": "~4.5.0",
-    "@vue/cli-plugin-unit-jest": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "@vue/cli-plugin-babel": "~5.0.0-rc.2",
+    "@vue/cli-plugin-eslint": "~5.0.0-rc.2",
+    "@vue/cli-plugin-typescript": "~5.0.0-rc.2",
+    "@vue/cli-plugin-unit-jest": "~5.0.0-rc.2",
+    "@vue/cli-service": "~5.0.0-rc.2",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-prettier": "^6.0.0",
-    "@vue/eslint-config-typescript": "^7.0.0",
+    "@vue/eslint-config-typescript": "^9.1.0",
     "@vue/test-utils": "^2.0.0-0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-vue": "^7.0.0",
-    "prettier": "^2.2.1",
+    "autoprefixer": "^10.4.2",
+    "bili": "^5.0.5",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "jest": "^27.1.0",
+    "postcss": "^8.4.6",
+    "prettier": "^2.4.1",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "rollup-plugin-vue": "^6.0.0",
+    "tailwindcss": "^3.0.18",
+    "ts-jest": "^27.0.4",
     "typescript": "~4.1.5",
+    "vue-cli-plugin-tailwind": "^3.0.0-beta.0",
     "vue-jest": "^5.0.0-0"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "maintained node versions"
+  ],
+  "license": "MIT",
+  "repository": {
+    "url": "git@github.com:kien5436/vue-nav-tab.git",
+    "type": "git"
+  },
+  "keywords": [
+    "vue",
+    "tab"
+  ]
 }
