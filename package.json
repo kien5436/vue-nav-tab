@@ -8,10 +8,10 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "tailwind": "npx tailwindcss -i ./src/input.css -o ./src/vue-pager.css"
+    "tailwind": "npx tailwindcss -i ./src/style.css -o ./src/index.css"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
+  "main": "dist/index.min.js",
+  "module": "dist/index.esm.min.js",
   "files": [
     "dist",
     "types"
@@ -33,14 +33,12 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^9.1.0",
     "@vue/test-utils": "^2.0.0-0",
-    "autoprefixer": "^10.4.2",
     "bili": "^5.0.5",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.0.3",
     "jest": "^27.1.0",
-    "postcss": "^8.4.6",
     "prettier": "^2.4.1",
     "rollup-plugin-typescript2": "^0.31.2",
     "rollup-plugin-vue": "^6.0.0",

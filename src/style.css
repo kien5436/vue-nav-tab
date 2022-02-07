@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .vp-bg-transparent-\.3 {
+    background: rgba(255, 255, 255, .3);
+  }
+}
+
+@layer components {
+  .vp-flex:not(.vp-flex-col) .vp-item {
+    @apply before:vp-content-[''] first:before:vp-content-[] before:vp-w-0 before:vp-h-[70%] before:vp-absolute before:vp-top-1.5 before:vp--left-px before:vp-border-0 before:vp-border-r before:vp-border-solid before:vp-border-r-gray-300 before:vp-transition hover:before:vp-border-transparent;
+  }
+
+  .vp-item:hover + .vp-item::before,
+  .vp-item-active + .vp-item::before {
+    @apply !vp-border-0;
+  }
+
+  .vp-tabs .vp-item {
+    @apply vp-border-transparent vp-border vp-border-b-0 vp-border-solid hover:vp-border-gray-300 vp--mb-px;
+  }
+
+  .vp-tabs .vp-item-active {
+    @apply vp-border-gray-300 vp-bg-white vp-text-gray-900 vp-border-b-white;
+  }
+
+  .vp-tabs-bottom .vp-item {
+    @apply vp--mt-px vp-mb-0 vp-border-b;
+  }
+
+  .vp-tabs-bottom .vp-item-active {
+    @apply vp-border-t-white !vp-border-b-gray-300 vp-border-b;
+  }
+
+  .vp-pills .vp-item:not(.vp-item-active):hover {
+    @apply vp-bg-gray-100;
+  }
+
+  .vp-pills .vp-item-active {
+    @apply vp-bg-blue-500 vp-text-white;
+  }
+
+  .vp-pills .vp-item-active .vp-absolute.vp-w-6.vp-h-6:hover {
+    @apply vp-bg-transparent-.3;
+  }
+}
