@@ -46,3 +46,33 @@
     @apply vp-bg-transparent-.3;
   }
 }
+
+@font-face {
+  font-family: 'icomoon';
+  src:
+    url('fonts/icomoon.ttf?vkbuum') format('truetype'),
+    url('fonts/icomoon.woff?vkbuum') format('woff'),
+    url('fonts/icomoon.svg?vkbuum#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.vp-icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.vp-icon-x:before {
+  content: "\e900";
+}

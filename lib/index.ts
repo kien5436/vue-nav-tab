@@ -1,7 +1,6 @@
 import { App } from "vue";
 
 import "./index.css";
-import "./fonts/style.css";
 // import BlankTabView from "./components/BlankTabView.vue";
 import HNav from "./components/HNav.vue";
 import VNav from "./components/VNav.vue";

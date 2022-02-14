@@ -8,10 +8,10 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "tailwind": "npx tailwindcss -i ./src/style.css -o ./src/index.css"
+    "tailwind": "npx tailwindcss -i ./lib/style.css -o ./lib/index.css"
   },
-  "main": "dist/index.min.js",
-  "module": "dist/index.esm.min.js",
+  "main": "dist/index.common.js",
+  "module": "dist/index.umd.min.js",
   "files": [
     "dist",
     "types"
@@ -50,8 +50,7 @@
   },
   "browserslist": [
     "defaults",
-    "not IE 11",
-    "maintained node versions"
+    "not IE 11"
   ],
   "license": "MIT",
   "repository": {

@@ -7,7 +7,7 @@ module.exports = {
     float: false,
     preflight: false,
   },
-  content: ["./src/**/*.{vue,js,ts,jsx,tsx}"],
+  content: ["./lib/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
     extend: {},
   },
