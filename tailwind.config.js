@@ -1,3 +1,9 @@
+const content = ["./lib/**/*.{vue,js,ts}"];
+
+if ("prod" !== process.env.NODE_ENV) {
+  content.push("./src/**/*.{vue,ts}");
+}
+
 /** @type import("tailwindcss/tailwind-config").TailwindConfig */
 module.exports = {
   corePlugins: {
@@ -7,7 +13,7 @@ module.exports = {
     float: false,
     preflight: false,
   },
-  content: ["./lib/**/*.{vue,js,ts,jsx,tsx}"],
+  content,
   theme: {
     extend: {},
   },

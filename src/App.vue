@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="vp-container vp-mx-auto">
     <button type="button" @click="addNewTab">add new tab</button>
     <h-nav class="nav-tabs">
       <tab

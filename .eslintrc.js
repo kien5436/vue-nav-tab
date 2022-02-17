@@ -1,3 +1,4 @@
+/** @type import('eslint').Linter.Config */
 module.exports = {
   root: true,
   env: {
@@ -15,9 +16,11 @@ module.exports = {
     parser: "@typescript-eslint/parser",
   },
   rules: {
-    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-console": "prod" === process.env.NODE_ENV ? "warn" : "off",
+    "no-debugger": "prod" === process.env.NODE_ENV ? "warn" : "off",
     "vue/multi-word-component-names": "off",
+    "prettier/prettier": ["error", { endOfLine: "auto" }],
+    yoda: ["error", "always"],
   },
   overrides: [
     {
@@ -30,4 +33,5 @@ module.exports = {
       },
     },
   ],
+  ignorePatterns: ["dist/*", "types/*", "node_modules/*"],
 };

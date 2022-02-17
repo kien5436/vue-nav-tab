@@ -1,10 +1,15 @@
+/**
+ * vue-nav-tab 1.0.1
+ * by Phạm Trung Kiên
+ * https://github.com/kien5436/vue-nav-tab
+ */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer utilities {
   .vp-bg-transparent-\.3 {
-    background: rgba(255, 255, 255, .3);
+    background: rgba(255, 255, 255, 0.3);
   }
 }
 
@@ -49,8 +54,7 @@
 
 @font-face {
   font-family: 'icomoon';
-  src:
-    url('fonts/icomoon.ttf?vkbuum') format('truetype'),
+  src: url('fonts/icomoon.ttf?vkbuum') format('truetype'),
     url('fonts/icomoon.woff?vkbuum') format('woff'),
     url('fonts/icomoon.svg?vkbuum#icomoon') format('svg');
   font-weight: normal;
@@ -74,5 +78,5 @@
 }
 
 .vp-icon-x:before {
-  content: "\e900";
+  content: '\e900';
 }

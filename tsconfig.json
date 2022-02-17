@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "declaration": true,
+    "declarationDir": "types",
     "esModuleInterop": true,
     "importHelpers": true,
     "jsx": "preserve",
