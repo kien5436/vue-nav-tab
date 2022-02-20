@@ -17,13 +17,11 @@ export default defineComponent({
   },
   setup(props) {
     const classes = computed(() => ({
-      "vp-tabs vp-border-solid": "tabs" === props.appearance,
+      "vp-border-b-gray-300 vp-border-b": "tabs" === props.appearance && "top" === props.position,
+      "vp-border-t-gray-300 vp-border-t": "tabs" === props.appearance && "bottom" === props.position,
       "vp-pills": "pills" === props.appearance,
+      "vp-tabs vp-border-solid": "tabs" === props.appearance,
       "vp-tabs-bottom": "bottom" === props.position,
-      "vp-border-t-gray-300 vp-border-t":
-        "tabs" === props.appearance && "bottom" === props.position,
-      "vp-border-b-gray-300 vp-border-b":
-        "tabs" === props.appearance && "top" === props.position,
     }));
 
     return { classes };

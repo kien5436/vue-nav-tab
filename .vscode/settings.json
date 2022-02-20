@@ -1,6 +1,4 @@
 {
-  "prettier.printWidth": 100,
-  "prettier.singleQuote": true,
   "vetur.format.defaultFormatter.ts": "none",
   "vetur.format.defaultFormatter.stylus": "none",
   "vetur.format.defaultFormatter.scss": "none",
@@ -15,5 +13,16 @@
   "vetur.validation.templateProps": true,
   "html-css-class-completion.enableFindUsage": true,
   "html-css-class-completion.includeGlobPattern": "**/*.{css,scss,sass,eex,slim,tsx,jsx,haml,svelte,liquid,tpl,latte,php,html,twig,vue}",
-  "html-css-class-completion.enableEmmetSupport": true
+  "html-css-class-completion.enableEmmetSupport": true,
+  "[javascript]": {
+    "editor.maxTokenizationLineLength": 2500,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.format.enable": true
 }

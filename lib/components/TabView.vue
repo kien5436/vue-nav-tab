@@ -24,7 +24,7 @@ export default defineComponent({
     <keep-alive>
       <component
         :is="currentTab.view"
-        :key="currentTab.id"
+        :key="currentTab._key"
         v-bind="currentTab.viewProps"
       />
     </keep-alive>

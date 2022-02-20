@@ -6,6 +6,7 @@ if ("prod" !== process.env.NODE_ENV) {
 
 /** @type import("tailwindcss/tailwind-config").TailwindConfig */
 module.exports = {
+  content,
   corePlugins: {
     accessibility: false,
     backgroundClip: false,
@@ -13,10 +14,7 @@ module.exports = {
     float: false,
     preflight: false,
   },
-  content,
-  theme: {
-    extend: {},
-  },
   plugins: [],
   prefix: "vp-",
+  theme: { extend: {} },
 };

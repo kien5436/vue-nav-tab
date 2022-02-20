@@ -1,9 +1,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-export default defineComponent({
-  name: "VNav",
-});
+export default defineComponent({ name: "VNav" });
 </script>
 
 <template>

@@ -2,9 +2,9 @@ import { App } from "vue";
 
 import "./style.css";
 import HNav from "./components/HNav.vue";
-import VNav from "./components/VNav.vue";
 import Tab from "./components/Tab.vue";
 import TabView from "./components/TabView.vue";
+import VNav from "./components/VNav.vue";
 
 export default {
   install(app: App): void {
@@ -15,4 +15,4 @@ export default {
   },
 };
 
-export { createTabs, useCurrentTab, useTabs, addTab } from "./operations";
+export * from "./operations";

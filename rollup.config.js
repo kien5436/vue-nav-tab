@@ -1,10 +1,10 @@
 import { babel, getBabelOutputPlugin } from "@rollup/plugin-babel";
-import { terser } from "rollup-plugin-terser";
 import banner from "rollup-plugin-banner";
 import copy from "rollup-plugin-copy";
 import del from "rollup-plugin-delete";
 import jsx from "acorn-jsx";
 import postcss from "rollup-plugin-postcss";
+import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
 import vue from "rollup-plugin-vue";
 
@@ -18,6 +18,8 @@ const outputOptions = {
 
 /** @type import("rollup").RollupOptions */
 const config = {
+  acornInjectPlugins: [jsx()],
+  external: ["vue"],
   input: "./lib/index.ts",
   output: [
     {
@@ -60,9 +62,7 @@ const config = {
     }),
     typescript({
       tsconfig: "./tsconfig.json",
-      tsconfigOverride: {
-        include: ["lib/**/*.ts", "lib/**/*.vue"],
-      },
+      tsconfigOverride: { include: ["lib/**/*.ts", "lib/**/*.vue"] },
       useTsconfigDeclarationDir: true,
     }),
     vue(),
@@ -70,12 +70,8 @@ const config = {
     by <%= pkg.author %>
     <%= pkg.repository.url %>`),
     babel({ babelHelpers: "bundled" }),
-    copy({
-      targets: [{ src: ["lib/fonts/*", "!**/*.json"], dest: "dist/fonts" }],
-    }),
+    copy({ dest: "dist/fonts", targets: [{ src: ["lib/fonts/*", "!**/*.json"] }] }),
   ],
-  acornInjectPlugins: [jsx()],
-  external: ["vue"],
 };
 
 export default config;

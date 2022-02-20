@@ -1,53 +1,29 @@
-<template>
-  <div class="vp-container vp-mx-auto">
-    <button type="button" @click="addNewTab">add new tab</button>
-    <h-nav class="nav-tabs">
-      <tab
-        v-for="tab in tabs"
-        :key="tab.id"
-        :tab-id="tab.id"
-        :active="tab.active"
-        :closable="tab.closable"
-        group="base"
-      >
-        <span v-if="typeof tab.title === 'string'">
-          {{ tab.title }}
-        </span>
-        <component :is="tab.title" v-else />
-      </tab>
-    </h-nav>
-
-    <tab-view group="base" />
-  </div>
-</template>
-
 <script lang="ts">
-import { defineComponent, defineAsyncComponent } from "vue";
-import { createTabs, addTab } from "../lib";
+import { addTab, createTabs } from "../lib";
+import { defineAsyncComponent, defineComponent } from "vue";
 
 import Home from "./components/Home.vue";
 import HomeTab from "./components/HomeTab.vue";
 
-const HelloWorld = defineAsyncComponent(
-  () => import("./components/HelloWorld.vue")
-);
+const HelloWorld = defineAsyncComponent(() => import("./components/HelloWorld.vue"));
 const Profile = defineAsyncComponent(() => import("./components/Profile.vue"));
 
 export default defineComponent({
   name: "App",
   setup() {
-    const tabs = createTabs("base", [
+    const group = "base";
+    const tabs = createTabs(group, [
       {
-        id: "home",
         active: true,
         closable: true,
+        id: "home",
         title: HomeTab,
         view: Home,
       },
       {
-        id: "profile",
         active: false,
         closable: true,
+        id: "profile",
         title: "Profile",
         view: Profile,
       },
@@ -56,20 +32,70 @@ export default defineComponent({
     function addNewTab() {
       const id = Math.random();
 
-      addTab("base", {
+      addTab(group, {
+        active: true,
+        closable: true,
         id: "new" + id,
         title: "new tab " + id,
         view: HelloWorld,
         viewProps: { msg: "new tab " + id },
-        active: true,
-        closable: true,
       });
     }
 
-    return { tabs, addNewTab };
+    function onTabChanged(tabId:string, prevTabId: string) {
+      console.debug(`App.vue:69: tab was changed from ${prevTabId} to ${tabId}`);
+    }
+
+    function onCloseTab(tabId: string) {
+      console.debug("App.vue:73: close tab", tabId);
+    }
+
+    function openProfile() {
+
+      addTab(group, {
+        active: true,
+        closable: true,
+        id: "profile",
+        title: "Profile",
+        view: Profile,
+      });
+    }
+
+    return {
+      addNewTab,
+      group,
+      onCloseTab,
+      onTabChanged,
+      openProfile,
+      tabs,
+    };
   },
 });
 </script>
+
+<template>
+  <div class="vp-container vp-mx-auto">
+    <button type="button" @click="addNewTab">add new tab</button>
+    <button type="button" @click="openProfile">open profile</button>
+    <h-nav class="nav-tabs">
+      <tab
+        v-for="tab in tabs"
+        :key="tab.id"
+        :tab-id="tab.id"
+        :active="tab.active"
+        :closable="tab.closable"
+        :group="group"
+      >
+        <span v-if="typeof tab.title === 'string'">
+          {{ tab.title }}
+        </span>
+        <component :is="tab.title" v-else />
+      </tab>
+    </h-nav>
+
+    <tab-view :group="group" />
+  </div>
+</template>
 
 <style>
 #app {
