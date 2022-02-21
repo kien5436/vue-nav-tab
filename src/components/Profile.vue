@@ -1,22 +1,18 @@
 <script lang="ts">
-import { defineComponent, onDeactivated, onUnmounted, ref } from "vue";
+import { defineComponent, ref } from "vue";
+
+import { refreshTab } from "../../lib/operations";
 
 export default defineComponent({
+  name: "Profile",
   setup() {
     const count = ref(0);
 
-    onDeactivated(() => {
+    function refreshThisTab() {
+      refreshTab("base", "profile");
+    }
 
-      console.debug("Profile.vue:10: onDeactivated");
-    });
-
-    onUnmounted(() => {
-
-      console.debug("Profile.vue:15: onUnmounted");
-
-    });
-
-    return { count };
+    return { count, refreshThisTab };
   },
 });
 </script>
@@ -26,4 +22,5 @@ export default defineComponent({
   <h1>profile page</h1>
   <p>You visited this tab <span style="color:#f00">{{count}}</span> times</p>
   <button type="button" @click="count++">increase</button>
+  <button type="button" @click="refreshThisTab">refresh this tab</button>
 </template>

@@ -13,7 +13,8 @@ export interface Tab {
   viewProps?: unknown;
 }
 
-const tabGroup: { [key: string]: Ref<Tab[]> } = reactive({});
+const tabsGroup: { [key: string]: Ref<Tab[]> } = reactive({});
+const removedTabsGroup: { [key: string]: string[] } = {};
 const BlankTab: Tab = {
   active: true,
   id: "_",
@@ -27,7 +28,7 @@ export function createTabs(group: string, tabs: Tab[]) {
     throw new VueNavTabError("'tabs' must be an array");
   }
 
-  if (tabGroup.hasOwnProperty(group)) {
+  if (tabsGroup.hasOwnProperty(group)) {
     throw new VueNavTabError(`'${group}' was created. If you want to add more tabs into it, use 'addTab' instead`);
   }
 
@@ -50,14 +51,15 @@ export function createTabs(group: string, tabs: Tab[]) {
     _tabs.value.push(BlankTab);
   }
 
-  tabGroup[group] = _tabs;
+  tabsGroup[group] = _tabs;
+  removedTabsGroup[group] = [];
 
-  return tabGroup[group] as unknown as Tab[];
+  return tabsGroup[group] as unknown as Tab[];
 }
 
 export function useTabs(group: string) {
 
-  const tabs = tabGroup[group];
+  const tabs = tabsGroup[group];
 
   if (undefined === tabs) {
     throw new VueNavTabError(`Group '${group}' is undefined`);
@@ -93,6 +95,18 @@ export function addTab(group: string, tab: Tab) {
     title: !isPrimitiveType(tab.title) ? markRaw(tab.title as Component) : tab.title.toString(),
     view: markRaw(tab.view),
   };
+  let wasRemoved = false;
+
+  for (let i = removedTabsGroup[group].length; 0 <= --i;) {
+
+    if (removedTabsGroup[group][i] === tab.id) {
+
+      wasRemoved = true;
+      cookedTab._key = cookedTab.id + Date.now();
+      removedTabsGroup[group].splice(i, 1);
+      break;
+    }
+  }
 
   if (1 === tabs.length && BlankTab.id === tabs[0].id) {
 
@@ -114,15 +128,11 @@ export function addTab(group: string, tab: Tab) {
     cookedTab.active = true;
   }
 
-  if (0 > idx) {
+  if (0 > idx || wasRemoved) {
     tabs.push(cookedTab);
   }
   else {
-    // if (tabs[idx]._remove) {
-
-    //   cookedTab._key = cookedTab.id + Date.now();
-    // }
-
+    cookedTab._key = tabs[idx]._key as string;
     tabs.splice(idx, 1, cookedTab);
   }
 }
@@ -137,6 +147,8 @@ export function removeTab(group: string, tabId: string) {
   if (0 > idx) {
     return;
   }
+
+  removedTabsGroup[group].push(tabId);
 
   if (1 === tabs.length) {
 

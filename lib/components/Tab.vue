@@ -29,6 +29,9 @@ export default defineComponent({
     },
   },
   setup(props) {
+
+    const tabs = useTabs(props.group);
+    const currentTab = useCurrentTab(props.group);
     const classes = computed(() => ({
       "vp-item-active": props.active,
       "vp-pr-4 vp-justify-center": !props.closable,
@@ -37,8 +40,6 @@ export default defineComponent({
       "vp-text-gray-100 !vp-text-gray-500 !vp-bg-gray-100 vp-pointer-events-none": "_" === props.tabId,
     }));
     const computedTabId = computed(() => `${props.tabId}-tab`);
-    const tabs = useTabs(props.group);
-    const currentTab = useCurrentTab(props.group);
 
     function activateTab() {
 
