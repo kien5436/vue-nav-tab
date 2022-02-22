@@ -11,23 +11,26 @@ declare const _default: import("vue").DefineComponent<{
         required: true;
         type: StringConstructor;
     };
-    tabId: StringConstructor;
     rounded: {
         default: boolean;
         type: BooleanConstructor;
+    };
+    tabId: {
+        required: true;
+        type: StringConstructor;
     };
 }, {
     activateTab: () => void;
     classes: import("vue").ComputedRef<{
         "vp-item-active": boolean;
-        "vp-pr-8 vp-justify-start": boolean;
         "vp-pr-4 vp-justify-center": boolean;
+        "vp-pr-8 vp-justify-start": boolean;
         "vp-rounded-t": boolean;
         "vp-text-gray-100 !vp-text-gray-500 !vp-bg-gray-100 vp-pointer-events-none": boolean;
     }>;
+    closeTab: () => void;
     computedTabId: import("vue").ComputedRef<string>;
-    removeTab: () => void;
-}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
+}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("changed" | "close")[], "changed" | "close", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
     active: {
         default: boolean;
         type: BooleanConstructor;
@@ -40,12 +43,18 @@ declare const _default: import("vue").DefineComponent<{
         required: true;
         type: StringConstructor;
     };
-    tabId: StringConstructor;
     rounded: {
         default: boolean;
         type: BooleanConstructor;
     };
-}>>, {
+    tabId: {
+        required: true;
+        type: StringConstructor;
+    };
+}>> & {
+    onChanged?: ((...args: any[]) => any) | undefined;
+    onClose?: ((...args: any[]) => any) | undefined;
+}, {
     active: boolean;
     closable: boolean;
     rounded: boolean;

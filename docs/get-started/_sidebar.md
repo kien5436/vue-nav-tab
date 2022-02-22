@@ -1,0 +1,2 @@
+- Getting started
+  - [Installation](README.md)

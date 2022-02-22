@@ -2,23 +2,22 @@ import { babel, getBabelOutputPlugin } from "@rollup/plugin-babel";
 import banner from "rollup-plugin-banner";
 import copy from "rollup-plugin-copy";
 import del from "rollup-plugin-delete";
-import jsx from "acorn-jsx";
 import postcss from "rollup-plugin-postcss";
 import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
-import vue from "rollup-plugin-vue";
+import vuePlugin from "rollup-plugin-vue";
 
 const pkg = require("./package.json");
 
 /** @type import("rollup").OutputOptions */
 const outputOptions = {
   exports: "named",
+  externalLiveBindings: false,
   globals: { vue: "Vue" },
 };
 
 /** @type import("rollup").RollupOptions */
 const config = {
-  acornInjectPlugins: [jsx()],
   external: ["vue"],
   input: "./lib/index.ts",
   output: [
@@ -37,7 +36,12 @@ const config = {
         //   configFile: "./babel.config.js",
         //   allowAllFormats: true,
         // }),
-        terser(),
+        terser({
+          compress: {
+            ecma: 2015,
+            pure_getters: true,
+          },
+        }),
       ],
     },
     {
@@ -49,7 +53,12 @@ const config = {
         //   allowAllFormats: true,
         //   configFile: "./babel.config.js",
         // }),
-        terser(),
+        terser({
+          compress: {
+            ecma: 2015,
+            pure_getters: true,
+          },
+        }),
       ],
     },
   ],
@@ -65,12 +74,13 @@ const config = {
       tsconfigOverride: { include: ["lib/**/*.ts", "lib/**/*.vue"] },
       useTsconfigDeclarationDir: true,
     }),
-    vue(),
+    vuePlugin(),
     banner(`<%= pkg.name %> v<%= pkg.version %>
-    by <%= pkg.author %>
-    <%= pkg.repository.url %>`),
-    babel({ babelHelpers: "bundled" }),
-    copy({ dest: "dist/fonts", targets: [{ src: ["lib/fonts/*", "!**/*.json"] }] }),
+    @author <%= pkg.author %>
+    @link <%= pkg.repository.url %>
+    @license MIT`),
+    // babel({ babelHelpers: "bundled" }),
+    copy({ targets: [{ dest: "dist/fonts", src: ["lib/fonts/*", "!**/*.json"] }] }),
   ],
 };
 
