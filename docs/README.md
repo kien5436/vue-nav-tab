@@ -31,8 +31,10 @@ npm i vue-nav-tab
 
 ## Usage
 
-Please refer to [documentation](https://kien5436.github.io/vue-nav-tab/)
+Please refer to [documentation](quick-start.md)
 
 ## License
 
 MIT
+
+&copy; Phạm Trung Kiên
