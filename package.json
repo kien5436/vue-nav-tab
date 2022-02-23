@@ -8,7 +8,8 @@
     "build": "cross-env NODE_ENV=prod rollup -c",
     "test:unit": "vue-cli-service test:unit",
     "lint": "eslint . --ext .js,.ts,.vue --fix",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "docs": "docsify serve docs"
   },
   "main": "dist/index.common.js",
   "module": "dist/index.es.js",

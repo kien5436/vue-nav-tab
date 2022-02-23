@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <title>vue-nav-tab</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Description">
+  <meta name="keywords" content="vue,nav,tab,js,npm,yarn">
+  <meta name="description" content="Tab components for Vue.js project">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4.12.2/lib/themes/vue.css">
 </head>
@@ -24,14 +25,17 @@
       loadSidebar: true,
       maxLevel: 3,
       name: 'vue-nav-tab',
-      onlyCover: true,
+      // docsify-pagination
+      pagination: {
+        crossChapter: true,
+      },
       repo: 'kien5436/vue-nav-tab',
-      routerMode: 'history',
+      // routerMode: 'history',
       search: {
         maxAge: 86400000, // Expiration time, the default one day
         paths: 'auto', // or []
         placeholder: 'Type to search',
-        noData: 'No Results!',
+        noData: 'No results!',
         depth: 2, // Headline depth, 1 - 6
         hideOtherSidebarContent: false, // whether or not to hide other sidebar content
       },
@@ -39,7 +43,8 @@
   </script>
   <!-- Docsify v4 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4.12.2"></script>
-  <script src="https://unpkg.com/docsify-copy-code@2"></script>
+  <script src="//unpkg.com/docsify-copy-code@2"></script>
+  <script src="//unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
 </body>
 
 </html>

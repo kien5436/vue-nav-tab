@@ -1,17 +1,19 @@
 # vue-nav-tab
 
-Tab component for Vue.js project
+Tab components for Vue.js project
 
 ## Build status
 
 ![Build status](https://img.shields.io/badge/build-passing-success?style=flat-square)
+[![npm](https://img.shields.io/npm/v/vue-nav-tab?style=flat-square)](https://www.npmjs.com/package/vue-nav-tab)
 
 ## Features
 
-- [x] Use with vue 3 Composition API
+- [x] Built with Vue 3's Composition API
+- [x] Zero dependency
 - [x] Create horizontal or vertical tabs
-- [ ] Open, close tabs programatically
-- [x] Easily customizing tab and page view
+- [x] Open, close or refresh tabs programatically
+- [x] Easily customizing tabs and page view
 
 ## Installation
 
@@ -23,44 +25,7 @@ npm i vue-nav-tab
 
 ## Usage
 
-- Browser
-
-```html
-
-```
-
-- ES module
-
-```js
-// main.js
-
-import { createApp } from 'vue';
-import 'vue-nav-tab/dist/index.css';
-import VueNavTab from 'vue-nav-tab';
-
-import App from './App.vue';
-
-createApp(App).use(VueNavTab).mount('#app');
-```
-
-```html
-// Component.vue
-<template>
-  <HNav appearance="tabs">
-    <Tab :tabId="newtab" :closable="false" :active="true" group="group" :title="New tab">
-      New tab
-    </Tab>
-  </HNav>
-
-  <TabView group="group" />
-</template>
-```
-
-- SSR
-
-```js
-const VueNavTab = require('vue-nav-tab');
-```
+Please refer to [documentation](quick-start.md)
 
 ## License
 

@@ -1,8 +1,8 @@
-# vue-nav-tab <small>1.1.0</small>
+# vue-nav-tab <small>1.1.1</small>
 
 > Tab components for Vue.js project
 
-- Use with Vue 3's Composition API
+- Built with Vue 3's Composition API
 
 [GitHub](https://github.com/kien5436/vue-nav-tab.git)
-[Get Started](get-started/)
+[Get Started](installation.md)

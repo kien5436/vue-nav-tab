@@ -1,4 +1,14 @@
 {
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    ".gitattributes": true,
+    ".npmignore": true,
+  },
   "vetur.format.defaultFormatter.ts": "none",
   "vetur.format.defaultFormatter.stylus": "none",
   "vetur.format.defaultFormatter.scss": "none",
@@ -11,9 +21,6 @@
   "vetur.format.defaultFormatter.css": "none",
   "vetur.experimental.templateInterpolationService": true,
   "vetur.validation.templateProps": true,
-  "html-css-class-completion.enableFindUsage": true,
-  "html-css-class-completion.includeGlobPattern": "**/*.{css,scss,sass,eex,slim,tsx,jsx,haml,svelte,liquid,tpl,latte,php,html,twig,vue}",
-  "html-css-class-completion.enableEmmetSupport": true,
   "[javascript]": {
     "editor.maxTokenizationLineLength": 2500,
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
