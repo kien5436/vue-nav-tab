@@ -1,4 +1,3 @@
-import { babel, getBabelOutputPlugin } from "@rollup/plugin-babel";
 import banner from "rollup-plugin-banner";
 import copy from "rollup-plugin-copy";
 import del from "rollup-plugin-delete";
@@ -7,7 +6,7 @@ import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
 import vuePlugin from "rollup-plugin-vue";
 
-const pkg = require("./package.json");
+import pkg from "./package.json";
 
 /** @type import("rollup").OutputOptions */
 const outputOptions = {
@@ -32,10 +31,6 @@ const config = {
       format: "umd",
       name: "VueNavTab",
       plugins: [
-        // getBabelOutputPlugin({
-        //   configFile: "./babel.config.js",
-        //   allowAllFormats: true,
-        // }),
         terser({
           compress: {
             ecma: 2015,
@@ -49,10 +44,6 @@ const config = {
       file: pkg.module,
       format: "es",
       plugins: [
-        // getBabelOutputPlugin({
-        //   allowAllFormats: true,
-        //   configFile: "./babel.config.js",
-        // }),
         terser({
           compress: {
             ecma: 2015,
@@ -79,7 +70,6 @@ const config = {
     @author <%= pkg.author %>
     @link <%= pkg.repository.url %>
     @license MIT`),
-    // babel({ babelHelpers: "bundled" }),
     copy({ targets: [{ dest: "dist/fonts", src: ["lib/fonts/*", "!**/*.json"] }] }),
   ],
 };

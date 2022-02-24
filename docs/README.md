@@ -23,6 +23,12 @@ yarn add vue-nav-tab
 npm i vue-nav-tab
 ```
 
+## Browser support
+
+| ![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![IE](https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Opera](https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png) |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| 51+                                                                                                 | 54+                                                                                                    | 15+                                                                                         | 38+                                                                                              | 10+                                                                                                 |
+
 ## Usage
 
 Please refer to [documentation](quick-start.md)
@@ -30,3 +36,5 @@ Please refer to [documentation](quick-start.md)
 ## License
 
 MIT
+
+&copy; Phạm Trung Kiên

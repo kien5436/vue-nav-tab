@@ -144,7 +144,7 @@ export function removeTab(group: string, tabId: string) {
   const idx = tabs.findIndex((tab) => tab.id === tabId);
   const currentTabIdx = tabs.findIndex((tab) => tab.id === currentTab.value.id);
 
-  if (0 > idx) {
+  if (0 > idx || !tabs[idx].closable) {
     return;
   }
 
@@ -202,4 +202,81 @@ function isPrimitiveType(value: unknown) {
 
 function isValidTab(tab: Tab) {
   return tab.hasOwnProperty("id") && tab.hasOwnProperty("title") && tab.hasOwnProperty("view");
+}
+
+export function removeAll(group: string) {
+
+  const tabs = useTabs(group);
+
+  tabs.forEach((tab) => removedTabsGroup[group].push(tab.id));
+  tabs.splice(0, tabs.length);
+  tabs.push(BlankTab);
+}
+
+export function removeLeft(group: string, tabId: string) {
+
+  const tabs = useTabs(group);
+  const idx = tabs.findIndex((tab) => tab.id === tabId);
+
+  if (0 > idx) {
+    return;
+  }
+
+  const currentTab = useCurrentTab(group);
+  let shouldActivate = false;
+
+  for (let i = 0; i < idx; i++) {
+
+    const removedId = tabs[i].id;
+
+    removedTabsGroup[group].push(removedId);
+
+    if (currentTab.value.id === removedId) {
+      shouldActivate = true;
+    }
+  }
+
+  tabs.splice(0, idx);
+
+  if (shouldActivate) {
+
+    tabs.splice(idx, 1, { ...tabs[idx], active: true });
+  }
+}
+
+export function removeRight(group: string, tabId: string) {
+
+  const tabs = useTabs(group);
+  const idx = tabs.findIndex((tab) => tab.id === tabId);
+
+  if (0 > idx) {
+    return;
+  }
+
+  const currentTab = useCurrentTab(group);
+  let shouldActivate = false;
+
+  for (let i = idx + 1, len = tabs.length; i < len; i++) {
+
+    const removedId = tabs[i].id;
+
+    removedTabsGroup[group].push(removedId);
+
+    if (currentTab.value.id === removedId) {
+      shouldActivate = true;
+    }
+  }
+
+  tabs.splice(idx + 1, tabs.length);
+
+  if (shouldActivate) {
+
+    tabs.splice(idx, 1, { ...tabs[idx], active: true });
+  }
+}
+
+export function removeOthers(group: string, tabId: string) {
+
+  removeLeft(group, tabId);
+  removeRight(group, tabId);
 }

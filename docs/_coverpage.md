@@ -1,4 +1,4 @@
-# vue-nav-tab <small>1.1.1</small>
+# vue-nav-tab <small>1.2.0</small>
 
 > Tab components for Vue.js project
 
