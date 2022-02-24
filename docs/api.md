@@ -47,6 +47,30 @@ You can use this function to open a tab programmatically like [example](quick-st
 
 Remove specific tab in `group`. A tab with `closable = false` can't be removed.
 
+##### removeAll
+
+- `removeAll(group: string): void`
+
+Remove all tabs in `group`.
+
+##### removeLeft
+
+- `removeLeft(group: string, tabId: string): void`
+
+Remove all tabs to the left of `tabId` in `group`.
+
+##### removeRight
+
+- `removeRight(group: string, tabId: string): void`
+
+Remove all tabs to the right of `tabId` in `group`.
+
+##### removeOthers
+
+- `removeOthers(group: string, tabId: string): void`
+
+Remove all tabs in `group` except the tab with `tabId`.
+
 ##### refreshTab
 
 - `refreshTab(group: string, tabId: string): void`

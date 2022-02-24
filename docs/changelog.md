@@ -1,3 +1,7 @@
+##### v1.2.0
+
+- Control tab's action via context menu
+
 ##### v1.1.1
 
 - Fix package's module type couldn't be rendered

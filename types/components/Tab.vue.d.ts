@@ -20,6 +20,10 @@ declare const _default: import("vue").DefineComponent<{
         type: StringConstructor;
     };
 }, {
+    actions: {
+        id: string;
+        text: string;
+    }[];
     activateTab: () => void;
     classes: import("vue").ComputedRef<{
         "vp-item-active": boolean;
@@ -30,6 +34,9 @@ declare const _default: import("vue").DefineComponent<{
     }>;
     closeTab: () => void;
     computedTabId: import("vue").ComputedRef<string>;
+    contextMenu: any;
+    onMenuClick: (actionId: string) => void;
+    showContextMenu: (e: MouseEvent) => void;
 }, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("changed" | "close")[], "changed" | "close", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
     active: {
         default: boolean;

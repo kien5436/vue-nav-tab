@@ -19,3 +19,7 @@ export declare function useCurrentTab(group: string): ComputedRef<Tab>;
 export declare function addTab(group: string, tab: Tab): void;
 export declare function removeTab(group: string, tabId: string): void;
 export declare function refreshTab(group: string, tabId: string): void;
+export declare function removeAll(group: string): void;
+export declare function removeLeft(group: string, tabId: string): void;
+export declare function removeRight(group: string, tabId: string): void;
+export declare function removeOthers(group: string, tabId: string): void;
