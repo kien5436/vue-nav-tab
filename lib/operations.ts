@@ -28,8 +28,20 @@ export function createTabs(group: string, tabs: Tab[]) {
     throw new VueNavTabError("'tabs' must be an array");
   }
 
+  const subGroups = group.split(".");
+
+  if (1 < subGroups.length) {
+
+    for (let i = 0, len = subGroups.length - 1; i < len; i++) {
+
+      if (!tabsGroup.hasOwnProperty(subGroups[i])) {
+        throw new VueNavTabError(`'${subGroups[i]}' group is missing while creating nested tabs. Do you forget to create it?`);
+      }
+    }
+  }
+
   if (tabsGroup.hasOwnProperty(group)) {
-    throw new VueNavTabError(`'${group}' was created. If you want to add more tabs into it, use 'addTab' instead`);
+    throw new VueNavTabError(`'${group}' group was created. If you want to add more tabs into it, use 'addTab' instead`);
   }
 
   if (tabs.some((_tab) => !isValidTab(_tab))) {
@@ -186,6 +198,13 @@ export function refreshTab(group: string, tabId: string) {
   }
 
   tabs.splice(selectedTabIdx, 1, { ...tabs[selectedTabIdx], _key: tabId + Date.now() });
+
+  for (const key in tabsGroup) {
+
+    if (tabsGroup.hasOwnProperty(key) && key.startsWith(group) && key !== group) {
+      delete tabsGroup[key];
+    }
+  }
 }
 
 function isPrimitiveType(value: unknown) {
@@ -207,38 +226,57 @@ function isValidTab(tab: Tab) {
 export function removeAll(group: string) {
 
   const tabs = useTabs(group);
+  let currentTabIsRemoved = false;
 
-  tabs.forEach((tab) => removedTabsGroup[group].push(tab.id));
-  tabs.splice(0, tabs.length);
-  tabs.push(BlankTab);
+  for (let i = 0, len = tabs.length; i < len; i++) {
+
+    const tab = tabs[i];
+
+    if (tab.closable) {
+
+      currentTabIsRemoved = !!tab.active;
+      removedTabsGroup[group].push(tab.id);
+      tabs.splice(i, 1);
+      i--, len--;
+    }
+  }
+
+  if (0 === tabs.length) {
+
+    tabs.push(BlankTab);
+  }
+  else if (currentTabIsRemoved) {
+    tabs.splice(0, 1, { ...tabs[0], active: true });
+  }
 }
 
 export function removeLeft(group: string, tabId: string) {
 
   const tabs = useTabs(group);
-  const idx = tabs.findIndex((tab) => tab.id === tabId);
+  let idx = tabs.findIndex((tab) => tab.id === tabId);
 
   if (0 > idx) {
     return;
   }
 
-  const currentTab = useCurrentTab(group);
-  let shouldActivate = false;
+  let currentTabIsRemoved = false;
 
   for (let i = 0; i < idx; i++) {
 
-    const removedId = tabs[i].id;
+    const tab = tabs[i];
 
-    removedTabsGroup[group].push(removedId);
+    if (tab.closable) {
 
-    if (currentTab.value.id === removedId) {
-      shouldActivate = true;
+      currentTabIsRemoved = !!tab.active;
+
+      removedTabsGroup[group].push(tab.id);
+      tabs.splice(i, 1);
+      i--, idx--;
     }
   }
 
-  tabs.splice(0, idx);
 
-  if (shouldActivate) {
+  if (currentTabIsRemoved) {
 
     tabs.splice(idx, 1, { ...tabs[idx], active: true });
   }
@@ -253,23 +291,23 @@ export function removeRight(group: string, tabId: string) {
     return;
   }
 
-  const currentTab = useCurrentTab(group);
-  let shouldActivate = false;
+  let currentTabIsRemoved = false;
 
   for (let i = idx + 1, len = tabs.length; i < len; i++) {
 
-    const removedId = tabs[i].id;
+    const tab = tabs[i];
 
-    removedTabsGroup[group].push(removedId);
+    if (tab.closable) {
 
-    if (currentTab.value.id === removedId) {
-      shouldActivate = true;
+      currentTabIsRemoved = !!tab.active;
+
+      removedTabsGroup[group].push(tab.id);
+      tabs.splice(i, 1);
+      i--, len--;
     }
   }
 
-  tabs.splice(idx + 1, tabs.length);
-
-  if (shouldActivate) {
+  if (currentTabIsRemoved) {
 
     tabs.splice(idx, 1, { ...tabs[idx], active: true });
   }
@@ -278,5 +316,13 @@ export function removeRight(group: string, tabId: string) {
 export function removeOthers(group: string, tabId: string) {
 
   removeLeft(group, tabId);
+  removeRight(group, tabId);
+}
+
+export function removeAbove(group: string, tabId: string) {
+  removeLeft(group, tabId);
+}
+
+export function removeBelow(group: string, tabId: string) {
   removeRight(group, tabId);
 }

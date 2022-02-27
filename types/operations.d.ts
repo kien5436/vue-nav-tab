@@ -23,3 +23,5 @@ export declare function removeAll(group: string): void;
 export declare function removeLeft(group: string, tabId: string): void;
 export declare function removeRight(group: string, tabId: string): void;
 export declare function removeOthers(group: string, tabId: string): void;
+export declare function removeAbove(group: string, tabId: string): void;
+export declare function removeBelow(group: string, tabId: string): void;

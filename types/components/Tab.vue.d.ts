@@ -7,6 +7,11 @@ declare const _default: import("vue").DefineComponent<{
         default: boolean;
         type: BooleanConstructor;
     };
+    direction: {
+        required: true;
+        type: StringConstructor;
+        validator: (val: string) => boolean;
+    };
     group: {
         required: true;
         type: StringConstructor;
@@ -20,23 +25,18 @@ declare const _default: import("vue").DefineComponent<{
         type: StringConstructor;
     };
 }, {
-    actions: {
-        id: string;
-        text: string;
-    }[];
     activateTab: () => void;
     classes: import("vue").ComputedRef<{
         "vp-item-active": boolean;
         "vp-pr-4 vp-justify-center": boolean;
         "vp-pr-8 vp-justify-start": boolean;
+        "vp-rounded": boolean;
+        "vp-rounded-b": boolean;
         "vp-rounded-t": boolean;
         "vp-text-gray-100 !vp-text-gray-500 !vp-bg-gray-100 vp-pointer-events-none": boolean;
     }>;
     closeTab: () => void;
     computedTabId: import("vue").ComputedRef<string>;
-    contextMenu: any;
-    onMenuClick: (actionId: string) => void;
-    showContextMenu: (e: MouseEvent) => void;
 }, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("changed" | "close")[], "changed" | "close", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
     active: {
         default: boolean;
@@ -45,6 +45,11 @@ declare const _default: import("vue").DefineComponent<{
     closable: {
         default: boolean;
         type: BooleanConstructor;
+    };
+    direction: {
+        required: true;
+        type: StringConstructor;
+        validator: (val: string) => boolean;
     };
     group: {
         required: true;

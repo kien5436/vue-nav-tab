@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ComputedRef, computed, defineComponent, nextTick, onMounted, onUnmounted, reactive, ref, toRefs } from "vue";
+import { ComputedRef, computed, defineComponent, nextTick, onMounted, onUnmounted, reactive, ref } from "vue";
 
 import { debounce } from "../debounce";
 
@@ -18,9 +18,9 @@ export default defineComponent({
       left: 0,
       top: 0,
     });
-    const boundingView = computed(() =>
+    const boundingEl = computed(() =>
       (props.boundingView
-        ? document.getElementById(props.boundingView)
+        ? el.value?.closest(props.boundingView)
         : document.documentElement)
     ) as ComputedRef<HTMLElement>;
     const style = computed(() => ({
@@ -35,26 +35,28 @@ export default defineComponent({
     onMounted(() => {
       document.addEventListener("keyup", onKeyUp, false);
       document.addEventListener("click", close, false);
-      boundingView.value.addEventListener("scroll", debouncedClose, false);
+      document.addEventListener("scroll", debouncedClose, false);
+      boundingEl.value.addEventListener("scroll", debouncedClose, false);
       window.addEventListener("resize", debouncedClose, false);
     });
 
     onUnmounted(() => {
       document.removeEventListener("keyup", onKeyUp, false);
       document.removeEventListener("click", close, false);
-      boundingView.value.removeEventListener("scroll", debouncedClose, false);
+      document.removeEventListener("scroll", debouncedClose, false);
+      boundingEl.value.removeEventListener("scroll", debouncedClose, false);
       window.removeEventListener("resize", debouncedClose, false);
     });
 
     function open(e: MouseEvent) {
 
-      if (!el.value || !el.value.firstElementChild) return;
+      if (!el.value) return;
 
-      const { height, width } = el.value.firstElementChild.getBoundingClientRect();
-      const { height: boundingHeight, width: boundingWidth } = boundingView.value.getBoundingClientRect();
-      // there something wrong with left coordinator with boundingView
-      coord.left = width + e.clientX + 20 > boundingWidth ? e.clientX - width : e.clientX;
-      coord.top = height + e.clientY + 20 > boundingHeight ? e.clientY - height : e.clientY;
+      el.value.style.setProperty("display", "");
+
+      const { height, width } = el.value.getBoundingClientRect();
+      coord.left = width + e.clientX + 20 > document.documentElement.clientWidth ? e.clientX - width : e.clientX;
+      coord.top = height + e.clientY + 20 > document.documentElement.clientHeight ? e.clientY - height : e.clientY;
 
       nextTick(() => el.value?.focus());
       isOpen.value = true;
@@ -79,7 +81,7 @@ export default defineComponent({
 </script>
 
 <template>
-<div ref="el" class="vp-fixed" tabindex="-1" :style="style">
+<div ref="el" class="vp-fixed vp-outline-none vp-font-sans" tabindex="-1" :style="style">
   <slot />
 </div>
 </template>

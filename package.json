@@ -1,11 +1,11 @@
 {
   "name": "vue-nav-tab",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Tab components for Vue.js project",
   "author": "Phạm Trung Kiên",
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev vue-cli-service serve",
-    "build": "cross-env NODE_ENV=prod rollup -c",
+    "dev": "cross-env NODE_ENV=development vue-cli-service serve",
+    "build": "cross-env NODE_ENV=production rollup -c",
     "test:unit": "vue-cli-service test:unit",
     "lint": "eslint . --ext .js,.ts,.vue --fix",
     "prepublishOnly": "yarn build",
