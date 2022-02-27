@@ -14,8 +14,8 @@ module.exports = {
     parser: "@typescript-eslint/parser",
   },
   rules: {
-    "no-console": "prod" === process.env.NODE_ENV ? "warn" : "off",
-    "no-debugger": "prod" === process.env.NODE_ENV ? "warn" : "off",
+    "no-console": "production" === process.env.NODE_ENV ? "warn" : "off",
+    "no-debugger": "production" === process.env.NODE_ENV ? "warn" : "off",
     quotes: ["error", "double"],
     "sort-imports": ["error", {
       "ignoreCase": false,
@@ -24,6 +24,7 @@ module.exports = {
       "memberSyntaxSortOrder": ["none", "multiple", "all", "single"],
       "allowSeparatedGroups": true,
     }],
+    "sort-keys": "warn",
     "vue/multi-word-component-names": "off",
   },
   overrides: [

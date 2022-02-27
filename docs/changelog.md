@@ -1,3 +1,15 @@
+##### v2.0.0
+
+> Breaking change
+
+Tab context menu in v1.x just works but have a problem when you select more than one tab; it is also somewhat semantically incorrect when used with `v-nav`. So I re-design it for better UI/UX.
+
+In addition, the use of tabs has been changed. The `<tab />` component is no longer exposed, you can instead use `<h-tabs />` for horizontal tabs or `<v-tabs />` for vertical tabs. Therefore, you write less code.
+
+- Fix tab context menu display position
+- Fix multiple context menus are shown when select multiple tabs
+- Update tab refresh behavior
+
 ##### v1.2.0
 
 - Control tab's action via context menu

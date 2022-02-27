@@ -1,11 +1,9 @@
-> *This is the guide for v2.x and above, if you use v1.x, please see [here](v1/quick-start.md)*
-
 #### Prerequisites
 
 - You are familiar with `Vue.js` and `Vue Single-File Components`.
 - This guide will use `ES modules` syntax for consistency. If you don't know about it, don't worry, you can start with [vue-cli](https://cli.vuejs.org/guide/installation.html), it will setup necessary things for your project.
 
-#### [Live demo](https://codesandbox.io/s/vue-nav-tab-2-example-vkl1uh)
+#### [Live demo](https://codesandbox.io/s/vue-nav-tab-example-kyz4eu)
 
 #### Quick example
 
@@ -85,8 +83,21 @@ export default defineComponent({
   <div class="container">
     <button type="button" @click="addNewTab">add new tab</button>
     <button type="button" @click="openProfile">open profile</button>
-
-    <h-tabs :group="group" :tabs="tabs" />
+    <h-nav>
+      <tab
+        v-for="tab in tabs"
+        :key="tab.id"
+        :tab-id="tab.id"
+        :active="tab.active"
+        :closable="tab.closable"
+        :group="group"
+      >
+        <span v-if="typeof tab.title === 'string'">
+          {{ tab.title }}
+        </span>
+        <component :is="tab.title" v-else />
+      </tab>
+    </h-nav>
 
     <tab-view :group="group" />
   </div>
@@ -98,18 +109,13 @@ Next, create `Profile` component in `src/components/Profile.vue`:
 ```vue
 <script>
 import { defineComponent, ref } from 'vue';
-import { refreshTab } from 'vue-nav-tab';
 
 export default defineComponent({
   name: 'Profile',
   setup() {
     const count = ref(0);
 
-    function refreshThisTab() {
-      refreshTab("base", "profile");
-    }
-
-    return { count, refreshThisTab };
+    return { count };
   },
 });
 </script>
@@ -117,10 +123,9 @@ export default defineComponent({
 <template>
   <h1>Profile</h1>
   <p>
-    You click button <span style="color:#f00">{{ count }}</span> times
+    You visited this tab <span style="color:#f00">{{ count }}</span> times
   </p>
   <button type="button" @click="count++">increase</button>
-  <button type="button" @click="refreshThisTab">reload this tab (or try tab context menu)</button>
 </template>
 ```
 

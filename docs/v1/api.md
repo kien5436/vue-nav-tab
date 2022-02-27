@@ -15,18 +15,11 @@ interface Tab {
 
 - `createTabs(group: string, tabs: Tab[]): Tab[]`
 
-Initialize first tabs to display on page. You can leave `tabs` as an empty array, an empty tab will be inserted to reserved for which tab is added later.
-
-If you want to create nested tabs, such as `child` inside `parent`, use the dotted path as group name.
-
-```js
-createTabs('parent', parentTabs)
-createTabs('parent.child', childTabs)
-```
+Initialize first tabs to display on page. You can leave `tabs` as an empty array, an empty tab will be set to reserved for which tab is added later.
 
 Note that you can only initialize tabs for a `group` once or this function will throw an error.
 
-Returned tabs will be used by `HTabs/VTabs` components.
+Returned tabs will be used by `<tab>` components.
 
 ##### useTabs
 
@@ -60,19 +53,11 @@ Remove specific tab in `group`. A tab with `closable = false` can't be removed.
 
 Remove all tabs in `group`.
 
-<!-- - `removeAll(group: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs. -->
-
 ##### removeLeft
 
 - `removeLeft(group: string, tabId: string): void`
 
 Remove all tabs to the left of `tabId` in `group`.
-
-<!-- - `removeLeft(group: string, tabId: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs to the left of `tabId` in `group`. -->
 
 ##### removeRight
 
@@ -80,39 +65,11 @@ Unless you set `force = true`, this function will remove all `closable` tabs to 
 
 Remove all tabs to the right of `tabId` in `group`.
 
-<!-- - `removeRight(group: string, tabId: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs to the right of `tabId` in `group`. -->
-
-##### removeAbove
-
-- `removeAbove(group: string, tabId: string): void`
-
-Remove all tabs to the above of `tabId` in `group`.
-
-<!-- - `removeAbove(group: string, tabId: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs to the above of `tabId` in `group`. -->
-
-##### removeBelow
-
-- `removeBelow(group: string, tabId: string): void`
-
-Remove all tabs to the below of `tabId` in `group`.
-
-<!-- - `removeBelow(group: string, tabId: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs to the below of `tabId` in `group`. -->
-
 ##### removeOthers
 
 - `removeOthers(group: string, tabId: string): void`
 
 Remove all tabs in `group` except the tab with `tabId`.
-
-<!-- - `removeOthers(group: string, tabId: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs except the tab with `tabId`. -->
 
 ##### refreshTab
 

@@ -28,8 +28,20 @@ export function createTabs(group: string, tabs: Tab[]) {
     throw new VueNavTabError("'tabs' must be an array");
   }
 
+  const subGroups = group.split(".");
+
+  if (1 < subGroups.length) {
+
+    for (let i = 0, len = subGroups.length - 1; i < len; i++) {
+
+      if (!tabsGroup.hasOwnProperty(subGroups[i])) {
+        throw new VueNavTabError(`'${subGroups[i]}' group is missing while creating nested tabs. Do you forget to create it?`);
+      }
+    }
+  }
+
   if (tabsGroup.hasOwnProperty(group)) {
-    throw new VueNavTabError(`'${group}' was created. If you want to add more tabs into it, use 'addTab' instead`);
+    throw new VueNavTabError(`'${group}' group was created. If you want to add more tabs into it, use 'addTab' instead`);
   }
 
   if (tabs.some((_tab) => !isValidTab(_tab))) {
@@ -186,6 +198,13 @@ export function refreshTab(group: string, tabId: string) {
   }
 
   tabs.splice(selectedTabIdx, 1, { ...tabs[selectedTabIdx], _key: tabId + Date.now() });
+
+  for (const key in tabsGroup) {
+
+    if (tabsGroup.hasOwnProperty(key) && key.startsWith(group) && key !== group) {
+      delete tabsGroup[key];
+    }
+  }
 }
 
 function isPrimitiveType(value: unknown) {
@@ -278,5 +297,13 @@ export function removeRight(group: string, tabId: string) {
 export function removeOthers(group: string, tabId: string) {
 
   removeLeft(group, tabId);
+  removeRight(group, tabId);
+}
+
+export function removeAbove(group: string, tabId: string) {
+  removeLeft(group, tabId);
+}
+
+export function removeBelow(group: string, tabId: string) {
   removeRight(group, tabId);
 }

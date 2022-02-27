@@ -15,7 +15,7 @@ export default defineComponent({
     const tabs = createTabs(group, [
       {
         active: true,
-        closable: true,
+        closable: false,
         id: "home",
         title: HomeTab,
         view: Home,
@@ -77,21 +77,8 @@ export default defineComponent({
   <div class="vp-container vp-mx-auto">
     <button type="button" @click="addNewTab">add new tab</button>
     <button type="button" @click="openProfile">open profile</button>
-    <h-nav class="nav-tabs">
-      <tab
-        v-for="tab in tabs"
-        :key="tab.id"
-        :tab-id="tab.id"
-        :active="tab.active"
-        :closable="tab.closable"
-        :group="group"
-      >
-        <span v-if="typeof tab.title === 'string'">
-          {{ tab.title }}
-        </span>
-        <component :is="tab.title" v-else />
-      </tab>
-    </h-nav>
+
+    <h-tabs :group="group" :tabs="tabs" />
 
     <tab-view :group="group" />
   </div>
@@ -102,8 +89,7 @@ export default defineComponent({
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
+  text-align: center;
 }
 </style>

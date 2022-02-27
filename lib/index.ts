@@ -1,16 +1,14 @@
 import { App } from "vue";
 
 import "./style.css";
-import HNav from "./components/HNav.vue";
-import Tab from "./components/Tab.vue";
+import HTabs from "./components/HTabs.vue";
 import TabView from "./components/TabView.vue";
-import VNav from "./components/VNav.vue";
+import VTabs from "./components/VTabs.vue";
 
 export default {
   install(app: App): void {
-    app.component(HNav.name, HNav);
-    app.component(VNav.name, VNav);
-    app.component(Tab.name, Tab);
+    app.component(HTabs.name, HTabs);
+    app.component(VTabs.name, VTabs);
     app.component(TabView.name, TabView);
   },
 };
