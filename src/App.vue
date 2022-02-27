@@ -34,7 +34,7 @@ export default defineComponent({
 
       addTab(group, {
         active: true,
-        closable: true,
+        closable: 0.5 <= id,
         id: "new" + id,
         title: "new tab " + id,
         view: HelloWorld,

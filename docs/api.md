@@ -58,61 +58,37 @@ Remove specific tab in `group`. A tab with `closable = false` can't be removed.
 
 - `removeAll(group: string): void`
 
-Remove all tabs in `group`.
-
-<!-- - `removeAll(group: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs. -->
+Remove all `closable` tabs in `group`.
 
 ##### removeLeft
 
 - `removeLeft(group: string, tabId: string): void`
 
-Remove all tabs to the left of `tabId` in `group`.
-
-<!-- - `removeLeft(group: string, tabId: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs to the left of `tabId` in `group`. -->
+Remove all `closable` tabs to the left of `tabId` in `group`.
 
 ##### removeRight
 
 - `removeRight(group: string, tabId: string): void`
 
-Remove all tabs to the right of `tabId` in `group`.
-
-<!-- - `removeRight(group: string, tabId: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs to the right of `tabId` in `group`. -->
+Remove all `closable` tabs to the right of `tabId` in `group`.
 
 ##### removeAbove
 
 - `removeAbove(group: string, tabId: string): void`
 
-Remove all tabs to the above of `tabId` in `group`.
-
-<!-- - `removeAbove(group: string, tabId: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs to the above of `tabId` in `group`. -->
+Remove all `closable` tabs to the above of `tabId` in `group`.
 
 ##### removeBelow
 
 - `removeBelow(group: string, tabId: string): void`
 
-Remove all tabs to the below of `tabId` in `group`.
-
-<!-- - `removeBelow(group: string, tabId: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs to the below of `tabId` in `group`. -->
+Remove all `closable` tabs to the below of `tabId` in `group`.
 
 ##### removeOthers
 
 - `removeOthers(group: string, tabId: string): void`
 
-Remove all tabs in `group` except the tab with `tabId`.
-
-<!-- - `removeOthers(group: string, tabId: string, force?: boolean): void`
-
-Unless you set `force = true`, this function will remove all `closable` tabs except the tab with `tabId`. -->
+Remove all tabs in `group` except the tab with `tabId` and non-`closable` tabs.
 
 ##### refreshTab
 

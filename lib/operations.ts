@@ -226,38 +226,57 @@ function isValidTab(tab: Tab) {
 export function removeAll(group: string) {
 
   const tabs = useTabs(group);
+  let currentTabIsRemoved = false;
 
-  tabs.forEach((tab) => removedTabsGroup[group].push(tab.id));
-  tabs.splice(0, tabs.length);
-  tabs.push(BlankTab);
+  for (let i = 0, len = tabs.length; i < len; i++) {
+
+    const tab = tabs[i];
+
+    if (tab.closable) {
+
+      currentTabIsRemoved = !!tab.active;
+      removedTabsGroup[group].push(tab.id);
+      tabs.splice(i, 1);
+      i--, len--;
+    }
+  }
+
+  if (0 === tabs.length) {
+
+    tabs.push(BlankTab);
+  }
+  else if (currentTabIsRemoved) {
+    tabs.splice(0, 1, { ...tabs[0], active: true });
+  }
 }
 
 export function removeLeft(group: string, tabId: string) {
 
   const tabs = useTabs(group);
-  const idx = tabs.findIndex((tab) => tab.id === tabId);
+  let idx = tabs.findIndex((tab) => tab.id === tabId);
 
   if (0 > idx) {
     return;
   }
 
-  const currentTab = useCurrentTab(group);
-  let shouldActivate = false;
+  let currentTabIsRemoved = false;
 
   for (let i = 0; i < idx; i++) {
 
-    const removedId = tabs[i].id;
+    const tab = tabs[i];
 
-    removedTabsGroup[group].push(removedId);
+    if (tab.closable) {
 
-    if (currentTab.value.id === removedId) {
-      shouldActivate = true;
+      currentTabIsRemoved = !!tab.active;
+
+      removedTabsGroup[group].push(tab.id);
+      tabs.splice(i, 1);
+      i--, idx--;
     }
   }
 
-  tabs.splice(0, idx);
 
-  if (shouldActivate) {
+  if (currentTabIsRemoved) {
 
     tabs.splice(idx, 1, { ...tabs[idx], active: true });
   }
@@ -272,23 +291,23 @@ export function removeRight(group: string, tabId: string) {
     return;
   }
 
-  const currentTab = useCurrentTab(group);
-  let shouldActivate = false;
+  let currentTabIsRemoved = false;
 
   for (let i = idx + 1, len = tabs.length; i < len; i++) {
 
-    const removedId = tabs[i].id;
+    const tab = tabs[i];
 
-    removedTabsGroup[group].push(removedId);
+    if (tab.closable) {
 
-    if (currentTab.value.id === removedId) {
-      shouldActivate = true;
+      currentTabIsRemoved = !!tab.active;
+
+      removedTabsGroup[group].push(tab.id);
+      tabs.splice(i, 1);
+      i--, len--;
     }
   }
 
-  tabs.splice(idx + 1, tabs.length);
-
-  if (shouldActivate) {
+  if (currentTabIsRemoved) {
 
     tabs.splice(idx, 1, { ...tabs[idx], active: true });
   }

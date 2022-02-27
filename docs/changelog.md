@@ -1,3 +1,8 @@
+##### v2.0.1
+
+- Show active tab when open from API
+- Fix `remove*` removes `closable` tabs
+
 ##### v2.0.0
 
 > Breaking change

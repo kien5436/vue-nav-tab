@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, onMounted, onUpdated, ref } from "vue";
 
 import { removeTab, useCurrentTab, useTabs } from "../operations";
 
@@ -47,6 +47,11 @@ export default defineComponent({
       "vp-text-gray-100 !vp-text-gray-500 !vp-bg-gray-100 vp-pointer-events-none": "_" === props.tabId,
     }));
     const computedTabId = computed(() => `${props.tabId}-tab`);
+    const tab = ref<HTMLElement | null>(null);
+
+    onMounted(() => props.active && tab.value?.scrollIntoView());
+
+    onUpdated(() => props.active && !isVisible() && tab.value?.scrollIntoView());
 
     function activateTab() {
 
@@ -64,11 +69,27 @@ export default defineComponent({
       removeTab(props.group, props.tabId);
     }
 
+    function isVisible() {
+
+      const { top, left, bottom, right } = tab.value?.getBoundingClientRect() as DOMRect;
+      const viewHeight = tab.value?.closest(".vp-nav")?.clientHeight as number;
+      const viewWidth = tab.value?.closest(".vp-nav")?.clientWidth as number;
+      console.debug("Tab.vue:77: ", { top, bottom, viewHeight }, { left, right, viewWidth }, {
+        "bottom < 0": 0 > bottom,
+        "top >= viewHeight": 0 <= top - viewHeight,
+        "right < 0": 0 > right,
+        "left >= viewWidth": 0 <= left - viewWidth,
+      });
+
+      return !(0 > bottom || 0 <= top - viewHeight || 0 > right || 0 <= left - viewWidth);
+    }
+
     return {
       activateTab,
       classes,
       closeTab,
       computedTabId,
+      tab,
     };
   },
 });
@@ -76,6 +97,7 @@ export default defineComponent({
 
 <template>
 <a
+  ref="tab"
   class="vp-flex vp-text-gray-600 vp-items-center !vp-no-underline vp-h-10 vp-box-border vp-transition vp-min-w-[7.5rem] vp-py-2 vp-pl-4 vp-max-w-xs vp-relative vp-cursor-pointer vp-font-sans vp-item"
   :class="classes"
   :id="computedTabId"

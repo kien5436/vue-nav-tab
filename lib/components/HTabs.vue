@@ -7,7 +7,10 @@ import Tab from "./Tab.vue";
 
 export default defineComponent({
   name: "HTabs",
-  components: { ContextMenu, Tab },
+  components: {
+    ContextMenu,
+    Tab,
+  },
   props: {
     appearance: {
       default: "tabs",
