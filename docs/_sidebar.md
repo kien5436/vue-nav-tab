@@ -18,4 +18,4 @@
   - [removeBelow](api.md#removebelow 'vue-nav-tab | removeBelow')
   - [removeOthers](api.md#removeothers 'vue-nav-tab | removeOthers')
   - [refreshTab](api.md#refreshtab 'vue-nav-tab | refreshTab')
-- [Changelog](changelog.md)
+- [Changelog](changelog.md 'vue-nav-tab | Changelog')
