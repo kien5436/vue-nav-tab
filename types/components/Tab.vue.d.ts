@@ -37,6 +37,7 @@ declare const _default: import("vue").DefineComponent<{
     }>;
     closeTab: () => void;
     computedTabId: import("vue").ComputedRef<string>;
+    tab: import("vue").Ref<HTMLElement | null>;
 }, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("changed" | "close")[], "changed" | "close", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
     active: {
         default: boolean;
