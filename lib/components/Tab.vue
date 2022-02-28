@@ -72,16 +72,18 @@ export default defineComponent({
     function isVisible() {
 
       const { top, left, bottom, right } = tab.value?.getBoundingClientRect() as DOMRect;
-      const viewHeight = tab.value?.closest(".vp-nav")?.clientHeight as number;
-      const viewWidth = tab.value?.closest(".vp-nav")?.clientWidth as number;
-      console.debug("Tab.vue:77: ", { top, bottom, viewHeight }, { left, right, viewWidth }, {
-        "bottom < 0": 0 > bottom,
-        "top >= viewHeight": 0 <= top - viewHeight,
-        "right < 0": 0 > right,
-        "left >= viewWidth": 0 <= left - viewWidth,
-      });
 
-      return !(0 > bottom || 0 <= top - viewHeight || 0 > right || 0 <= left - viewWidth);
+      if ("none" === props.direction) {
+
+        const { top: viewTop, bottom: viewBottom } = tab.value?.closest(".vp-nav")?.getBoundingClientRect() as DOMRect;
+
+        return !(bottom < viewTop || top > viewBottom);
+      }
+      else {
+        const { left: viewLeft, right: viewRight } = tab.value?.closest(".vp-nav")?.getBoundingClientRect() as DOMRect;
+
+        return !(left > viewRight || right < viewLeft);
+      }
     }
 
     return {

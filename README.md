@@ -35,4 +35,4 @@ Please refer to [documentation](https://kien5436.github.io/vue-nav-tab/)
 
 ## License
 
-MIT
+[MIT](LICENSE)
