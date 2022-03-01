@@ -1,3 +1,7 @@
+##### v2.1.0
+
+- Support i18n for context menu
+
 ##### v2.0.2
 
 - Fix `remove*` functions can't set active tab

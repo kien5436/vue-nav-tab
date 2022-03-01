@@ -1,9 +1,10 @@
 <script lang="ts">
-import { PropType, defineComponent, ref } from "vue";
+import { PropType, defineComponent } from "vue";
 
-import { Tab as ITab, refreshTab, removeAll, removeLeft, removeOthers, removeRight, removeTab } from "../operations";
 import ContextMenu from "./ContextMenu.vue";
+import { Tab as ITab } from "../operations";
 import Tab from "./Tab.vue";
+import { useContextMenu } from "../use-contextmenu";
 
 export default defineComponent({
   name: "VTabs",
@@ -23,70 +24,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const contextMenu = ref<InstanceType<typeof ContextMenu> | null>(null);
-    const tabContext = ref<string | null>(null);
-    const actions = [
-      {
-        id: "reload",
-        text: "Reload",
-      },
-      {
-        id: "close",
-        text: "Close",
-      },
-      {
-        id: "closeAll",
-        text: "Close all",
-      },
-      {
-        id: "closeOthers",
-        text: "Close others",
-      },
-      {
-        id: "closeAbove",
-        text: "Close to the above",
-      },
-      {
-        id: "closeBelow",
-        text: "Close to the below",
-      },
-    ];
-
-    function showContextMenu(e: MouseEvent, tabId: string) {
-
-      contextMenu.value?.open(e);
-      tabContext.value = tabId;
-    }
-
-    function onMenuClick(actionId: string) {
-
-      contextMenu.value?.close();
-
-      if (!tabContext.value) {
-        return;
-      }
-
-      switch (actionId) {
-        case "reload":
-          refreshTab(props.group, tabContext.value);
-          break;
-        case "close":
-          removeTab(props.group, tabContext.value);
-          break;
-        case "closeAll":
-          removeAll(props.group);
-          break;
-        case "closeOthers":
-          removeOthers(props.group, tabContext.value);
-          break;
-        case "closeAbove":
-          removeLeft(props.group, tabContext.value);
-          break;
-        case "closeBelow":
-          removeRight(props.group, tabContext.value);
-          break;
-      }
-    }
+    const { actions, contextMenu, onMenuClick, showContextMenu } = useContextMenu(props.group, "vertical");
 
     return {
       actions,
