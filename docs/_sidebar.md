@@ -1,6 +1,8 @@
 - Getting started
   - [Installation](installation.md 'vue-nav-tab | Installation')
   - [Quick start](quick-start.md 'vue-nav-tab | Quick start')
+- Options
+  - [i18n](options.md 'vue-nav-tab | Options')
 - Components
   - [HTabs](nav.md#htabs 'vue-nav-tab | HTabs')
   - [VTabs](nav.md#vtabs 'vue-nav-tab | VTabs')
