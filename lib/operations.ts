@@ -9,6 +9,7 @@ export interface Tab {
   closable?: boolean;
   id: string;
   title: string | Component | VNode;
+  titleProps?: unknown;
   view: Component | VNode;
   viewProps?: unknown;
 }
@@ -234,7 +235,11 @@ export function removeAll(group: string) {
 
     if (tab.closable) {
 
-      currentTabIsRemoved = !!tab.active;
+      if (!currentTabIsRemoved) {
+
+        currentTabIsRemoved = !!tab.active;
+      }
+
       removedTabsGroup[group].push(tab.id);
       tabs.splice(i, 1);
       i--, len--;
@@ -267,7 +272,10 @@ export function removeLeft(group: string, tabId: string) {
 
     if (tab.closable) {
 
-      currentTabIsRemoved = !!tab.active;
+      if (!currentTabIsRemoved) {
+
+        currentTabIsRemoved = !!tab.active;
+      }
 
       removedTabsGroup[group].push(tab.id);
       tabs.splice(i, 1);
@@ -299,7 +307,10 @@ export function removeRight(group: string, tabId: string) {
 
     if (tab.closable) {
 
-      currentTabIsRemoved = !!tab.active;
+      if (!currentTabIsRemoved) {
+
+        currentTabIsRemoved = !!tab.active;
+      }
 
       removedTabsGroup[group].push(tab.id);
       tabs.splice(i, 1);
