@@ -1,3 +1,7 @@
+##### v2.0.2
+
+- Fix `remove*` functions can't set active tab
+
 ##### v2.0.1
 
 - Show active tab when open from API

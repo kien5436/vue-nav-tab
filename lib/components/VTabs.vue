@@ -1,7 +1,7 @@
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { PropType, defineComponent, ref } from "vue";
 
-import { refreshTab, removeAll, removeLeft, removeOthers, removeRight, removeTab } from "../operations";
+import { Tab as ITab, refreshTab, removeAll, removeLeft, removeOthers, removeRight, removeTab } from "../operations";
 import ContextMenu from "./ContextMenu.vue";
 import Tab from "./Tab.vue";
 
@@ -19,7 +19,7 @@ export default defineComponent({
     },
     tabs: {
       required: true,
-      type: Array,
+      type: Array as PropType<ITab[]>,
     },
   },
   setup(props) {
@@ -116,7 +116,7 @@ export default defineComponent({
     <span v-if="typeof tab.title === 'string'">
       {{ tab.title }}
     </span>
-    <component :is="tab.title" v-else />
+    <component :is="tab.title" v-bind="tab.titleProps" v-else />
   </tab>
 
   <context-menu ref="contextMenu" boundingView=".vp-nav">
