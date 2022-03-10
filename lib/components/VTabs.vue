@@ -1,8 +1,8 @@
 <script lang="ts">
 import { PropType, defineComponent } from "vue";
 
+import { Tab as ITab, useTabs } from "../operations";
 import ContextMenu from "./ContextMenu.vue";
-import { Tab as ITab } from "../operations";
 import Tab from "./Tab.vue";
 import { useContextMenu } from "../use-contextmenu";
 
@@ -24,13 +24,65 @@ export default defineComponent({
     },
   },
   setup(props) {
+
     const { actions, contextMenu, onMenuClick, showContextMenu } = useContextMenu(props.group, "vertical");
+    const tabs = useTabs(props.group);
+
+    function dragStart(e: DragEvent) {
+
+      let id = (e.target as HTMLElement).id;
+      id = id.slice(0, id.lastIndexOf("-tab"));
+
+      e.dataTransfer?.setData("text/vnt-group", props.group);
+      e.dataTransfer?.setData("text/plain", id);
+    }
+
+    function dragOver(e: DragEvent) {
+
+      if (props.group !== e.dataTransfer?.getData("text/vnt-group")) return;
+
+      e.preventDefault();
+
+      const draggedItemId = e.dataTransfer?.getData("text/plain");
+      const draggedIdx = tabs.findIndex((tab) => tab.id === draggedItemId);
+      const targetItem = (e.target as HTMLElement).closest(".vp-item");
+      const targetId = targetItem?.id.slice(0, targetItem.id.lastIndexOf("-tab"));
+      const targetIdx = tabs.findIndex((tab) => tab.id === targetId);
+
+      if (draggedIdx !== targetIdx) {
+
+        [tabs[draggedIdx], tabs[targetIdx]] = [tabs[targetIdx], tabs[draggedIdx]];
+        tabs.splice(0, 0);
+      }
+    }
+
+    function drop(e: DragEvent) {
+
+      e.preventDefault();
+
+      if (props.group !== e.dataTransfer?.getData("text/vnt-group")) return;
+
+      const draggedItemId = e.dataTransfer?.getData("text/plain");
+      const draggedIdx = tabs.findIndex((tab) => tab.id === draggedItemId);
+      const targetItem = (e.target as HTMLElement).closest(".vp-item");
+      const targetId = targetItem?.id.slice(0, targetItem.id.lastIndexOf("-tab"));
+      const targetIdx = tabs.findIndex((tab) => tab.id === targetId);
+
+      if (draggedIdx !== targetIdx) {
+
+        [tabs[draggedIdx], tabs[targetIdx]] = [tabs[targetIdx], tabs[draggedIdx]];
+        tabs.splice(0, 0);
+      }
+    }
 
     return {
       actions,
       contextMenu,
       onMenuClick,
       showContextMenu,
+      dragStart,
+      dragOver,
+      drop,
     };
   },
 });
@@ -38,17 +90,23 @@ export default defineComponent({
 
 <template>
 <nav
-  class="vp-flex vp-flex-col vp-overflow-hidden hover:vp-overflow-x-hidden hover:vp-overflow-y-auto vp-border-0 vp-m-0 vp-p-0 vp-box-border vp-bg-transparent vp-w-fit vp-pills vp-nav"
+  class="vp-flex vp-flex-col vp-overflow-hidden hover:vp-overflow-x-hidden hover:vp-overflow-y-auto vp-border-0 vp-m-0 vp-p-0 vp-box-border vp-bg-transparent vp-w-fit vp-pills vp-select-none vp-relative vp-nav"
+  @dragstart="dragStart"
+  @dragover="dragOver"
+  @drop="drop"
 >
   <tab
-    v-for="tab in tabs"
+    v-for="(tab, i) in tabs"
     :key="tab.id"
     :tab-id="tab.id"
     :active="tab.active"
     :closable="tab.closable"
+    :title="tab.hoverTitle"
     :group="group"
     :rounded="rounded"
+    :style="{ top: `${2.5 * i}rem` }"
     direction="none"
+    class="vp-left-0 vp-w-full"
     @contextmenu.prevent="showContextMenu($event, tab.id)"
   >
     <span v-if="typeof tab.title === 'string'">

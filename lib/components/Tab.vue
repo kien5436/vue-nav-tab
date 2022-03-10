@@ -32,7 +32,6 @@ export default defineComponent({
       type: String,
     },
   },
-  emits: ["changed", "close"],
   setup(props) {
 
     const tabs = useTabs(props.group);
@@ -57,8 +56,8 @@ export default defineComponent({
 
       if (props.active) return;
 
-      const idx = tabs.findIndex((tab) => tab.id === props.tabId);
-      const currentTabIdx = tabs.findIndex((tab) => tab.id === currentTab.value.id);
+      const idx = tabs.findIndex((_tab) => _tab.id === props.tabId);
+      const currentTabIdx = tabs.findIndex((_tab) => _tab.id === currentTab.value.id);
 
       tabs.splice(currentTabIdx, 1, { ...currentTab.value, active: false });
       tabs.splice(idx, 1, { ...tabs[idx], active: true });
@@ -100,9 +99,10 @@ export default defineComponent({
 <template>
 <a
   ref="tab"
-  class="vp-flex vp-text-gray-600 vp-items-center !vp-no-underline vp-h-10 vp-box-border vp-transition vp-min-w-[7.5rem] vp-py-2 vp-pl-4 vp-max-w-xs vp-relative vp-cursor-pointer vp-font-sans vp-item"
+  class="vp-flex vp-text-gray-600 vp-items-center !vp-no-underline vp-h-10 vp-box-border vp-transition vp-min-w-[7.5rem] vp-pl-4 vp-max-w-xs vp-absolute vp-cursor-pointer vp-font-sans vp-item"
   :class="classes"
   :id="computedTabId"
+  draggable="true"
   @click="activateTab"
 >
   <div class="vp-truncate vp-text-clip vp-flex vp-items-center vp-box-border">

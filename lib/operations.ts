@@ -9,6 +9,7 @@ export interface Tab {
   closable?: boolean;
   id: string;
   title: string | Component | VNode;
+  hoverTitle?: string;
   titleProps?: unknown;
   view: Component | VNode;
   viewProps?: unknown;

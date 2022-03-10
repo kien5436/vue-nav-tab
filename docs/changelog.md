@@ -1,3 +1,8 @@
+##### v2.2.0
+
+- Add drag'n'drop feature
+- Support tooltips when hovering over a tab
+
 ##### v2.1.0
 
 - Support i18n for context menu

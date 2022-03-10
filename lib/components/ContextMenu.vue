@@ -81,7 +81,7 @@ export default defineComponent({
 </script>
 
 <template>
-<div ref="el" class="vp-fixed vp-outline-none vp-font-sans" tabindex="-1" :style="style">
+<div ref="el" class="vp-fixed vp-outline-none vp-font-sans vp-select-none" tabindex="-1" :style="style">
   <slot />
 </div>
 </template>

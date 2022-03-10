@@ -35,6 +35,7 @@ export default defineComponent({
       addTab(group, {
         active: true,
         closable: 0.5 <= id,
+        hoverTitle: "new tab " + id,
         id: "new" + id,
         title: "new tab " + id,
         view: HelloWorld,
