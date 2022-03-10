@@ -43,9 +43,7 @@ export default defineComponent({
 
 <template>
   <div class="container vp-mx-auto vp-p-3 vp-flex">
-    <v-tabs class="vp-h-52 vp-w-40 vp-mr-3" :group="group" :tabs="tabs">
-      <template #tab="{ title }">{{ title }}</template>
-    </v-tabs>
+    <v-tabs class="vp-h-52 vp-w-40 vp-mr-3" :group="group" :tabs="tabs" />
 
     <tab-view :group="group" />
   </div>

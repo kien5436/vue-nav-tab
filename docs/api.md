@@ -6,6 +6,7 @@ interface Tab {
   closable?: boolean; // tab can be closed or not
   id: string; // unique id for the tab
   title: string | Component | VNode; // tab's title, can be a string or complex component
+  hoverTitle?: string; // provide tooltips when hovering over the tab
   titleProps: unknown; // passing `props` to title if it is a component
   view: Component | VNode; // the view which will be displayed in <tab-view />
   viewProps?: unknown; // passing `props` if your view need some props from parent component

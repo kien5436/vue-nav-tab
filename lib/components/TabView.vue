@@ -12,6 +12,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+
     const currentTab = useCurrentTab(props.group);
 
     return { currentTab };

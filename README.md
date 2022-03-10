@@ -13,6 +13,7 @@ Tab components for Vue.js project
 - [x] Zero dependency
 - [x] Create horizontal or vertical tabs
 - [x] Open, close or refresh tabs programatically
+- [x] Drag'n'drop tabs
 - [x] Easily customizing tabs and page view
 
 ## Installation
