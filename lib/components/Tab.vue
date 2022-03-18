@@ -5,6 +5,7 @@ import { removeTab, useCurrentTab, useTabs } from "../operations";
 
 export default defineComponent({
   name: "Tab",
+  emits: [ "tabChanged" ],
   props: {
     active: {
       default: false,
@@ -32,7 +33,7 @@ export default defineComponent({
       type: String,
     },
   },
-  setup(props) {
+  setup(props, context) {
 
     const tabs = useTabs(props.group);
     const currentTab = useCurrentTab(props.group);
@@ -53,6 +54,7 @@ export default defineComponent({
     onUpdated(() => props.active && !isVisible() && tab.value?.scrollIntoView());
 
     function activateTab() {
+      const { emit } = context;
 
       if (props.active) return;
 
@@ -61,6 +63,7 @@ export default defineComponent({
 
       tabs.splice(currentTabIdx, 1, { ...currentTab.value, active: false });
       tabs.splice(idx, 1, { ...tabs[idx], active: true });
+      emit("tabChanged", tabs[idx], tabs[currentTabIdx]);
     }
 
     function closeTab() {

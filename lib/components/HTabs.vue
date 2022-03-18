@@ -36,7 +36,7 @@ export default defineComponent({
       type: Array as PropType<ITab[]>,
     },
   },
-  setup(props) {
+  setup(props, context) {
 
     const classes = computed(() => ({
       "vp-border-b-gray-300 vp-border-b": "tabs" === props.appearance && "top" === props.position,
@@ -95,6 +95,11 @@ export default defineComponent({
       }
     }
 
+    function setTabChanged(currentSelection: ITab, previousSelection: ITab) {
+      const { emit } = context;
+      emit("tabChanged", currentSelection, previousSelection);
+    }
+
     return {
       actions,
       classes,
@@ -104,6 +109,7 @@ export default defineComponent({
       dragStart,
       dragOver,
       drop,
+      setTabChanged,
     };
   },
 });
@@ -130,6 +136,7 @@ export default defineComponent({
     :style="{ left: `${7.5 * i}rem` }"
     class="vp-w-[7.5rem] vp-top-0"
     @contextmenu.prevent="showContextMenu($event, tab.id)"
+    @tab-changed="setTabChanged"
   >
     <span v-if="typeof tab.title === 'string'">
       {{ tab.title }}

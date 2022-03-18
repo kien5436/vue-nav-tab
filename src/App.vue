@@ -29,8 +29,14 @@ export default defineComponent({
       },
     ]);
 
+    // let nextId = 1;
+    function getId() {
+      // return nextId++;
+      return Math.random();
+    }
+
     function addNewTab() {
-      const id = Math.random();
+      const id = getId();
 
       addTab(group, {
         active: true,
@@ -62,6 +68,11 @@ export default defineComponent({
       });
     }
 
+    function setTabChanged(currentSelection: any, previousSelection: any) {
+      console.log("tab changed from " + previousSelection.id + " to " + currentSelection.id);
+    }
+
+
     return {
       addNewTab,
       group,
@@ -69,6 +80,7 @@ export default defineComponent({
       onTabChanged,
       openProfile,
       tabs,
+      setTabChanged,
     };
   },
 });
@@ -79,7 +91,7 @@ export default defineComponent({
     <button type="button" @click="addNewTab">add new tab</button>
     <button type="button" @click="openProfile">open profile</button>
 
-    <h-tabs :group="group" :tabs="tabs" />
+    <h-tabs :group="group" :tabs="tabs" @tab-changed="setTabChanged" />
 
     <tab-view :group="group" />
   </div>
