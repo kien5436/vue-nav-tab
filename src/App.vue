@@ -43,14 +43,6 @@ export default defineComponent({
       });
     }
 
-    function onTabChanged(tabId:string, prevTabId: string) {
-      console.debug(`App.vue:69: tab was changed from ${prevTabId} to ${tabId}`);
-    }
-
-    function onCloseTab(tabId: string) {
-      console.debug("App.vue:73: close tab", tabId);
-    }
-
     function openProfile() {
 
       addTab(group, {

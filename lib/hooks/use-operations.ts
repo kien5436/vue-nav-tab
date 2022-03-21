@@ -1,7 +1,7 @@
 import { Component, ComputedRef, Ref, VNode, computed, markRaw, reactive, ref } from "vue";
 
-import VueNavTabError, { MISSING_REQUIRED_PROPS } from "./error";
-import BlankTabView from "./components/BlankTabView.vue";
+import VueNavTabError, { MISSING_REQUIRED_PROPS } from "../utils/error";
+import BlankTabView from "../components/BlankTabView.vue";
 
 export interface Tab {
   _key?: string;

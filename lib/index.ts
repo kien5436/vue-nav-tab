@@ -1,7 +1,7 @@
 import { App, Plugin } from "vue";
 
 import "./style.css";
-import { ContextMenuLocale, key, mergeWithDefaultLocales } from "./use-contextmenu";
+import { ContextMenuLocale, key, mergeWithDefaultLocales } from "./hooks/use-contextmenu";
 import HTabs from "./components/HTabs.vue";
 import TabView from "./components/TabView.vue";
 import VTabs from "./components/VTabs.vue";
@@ -16,4 +16,4 @@ export default {
   },
 } as Plugin;
 
-export * from "./operations";
+export * from "./hooks/use-operations";

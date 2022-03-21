@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 export function debounce <F extends(...args: any[]) => any>(func: F, wait = 250, immediate = false) {
 
   let timeout: ReturnType<typeof setTimeout> | null = null;
