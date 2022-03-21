@@ -1,7 +1,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, onUpdated, ref } from "vue";
 
-import { removeTab, useCurrentTab, useTabs } from "../operations";
+import { removeTab, useCurrentTab, useTabs } from "../hooks/use-operations";
 
 export default defineComponent({
   name: "Tab",

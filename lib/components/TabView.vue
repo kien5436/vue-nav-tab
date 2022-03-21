@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import { useCurrentTab } from "../operations";
+import { useCurrentTab } from "../hooks/use-operations";
 
 export default defineComponent({
   name: "TabView",

@@ -1,10 +1,11 @@
 <script lang="ts">
 import { PropType, computed, defineComponent } from "vue";
 
-import { Tab as ITab, useTabs } from "../operations";
 import ContextMenu from "./ContextMenu.vue";
+import { Tab as ITab } from "../hooks/use-operations";
 import Tab from "./Tab.vue";
-import { useContextMenu } from "../use-contextmenu";
+import { useContextMenu } from "../hooks/use-contextmenu";
+import useDragDrop from "../hooks/use-drag-n-drop";
 
 export default defineComponent({
   name: "HTabs",
@@ -46,64 +47,17 @@ export default defineComponent({
       "vp-tabs-bottom": "bottom" === props.position,
     }));
     const { actions, contextMenu, onMenuClick, showContextMenu } = useContextMenu(props.group, "horizontal");
-    const tabs = useTabs(props.group);
-
-    function dragStart(e: DragEvent) {
-
-      let id = (e.target as HTMLElement).id;
-      id = id.slice(0, id.lastIndexOf("-tab"));
-
-      e.dataTransfer?.setData("text/vnt-group", props.group);
-      e.dataTransfer?.setData("text/plain", id);
-    }
-
-    function dragOver(e: DragEvent) {
-
-      if (props.group !== e.dataTransfer?.getData("text/vnt-group")) return;
-
-      e.preventDefault();
-
-      const draggedItemId = e.dataTransfer?.getData("text/plain");
-      const draggedIdx = tabs.findIndex((tab) => tab.id === draggedItemId);
-      const targetItem = (e.target as HTMLElement).closest(".vp-item");
-      const targetId = targetItem?.id.slice(0, targetItem.id.lastIndexOf("-tab"));
-      const targetIdx = tabs.findIndex((tab) => tab.id === targetId);
-
-      if (draggedIdx !== targetIdx) {
-
-        [tabs[draggedIdx], tabs[targetIdx]] = [tabs[targetIdx], tabs[draggedIdx]];
-        tabs.splice(0, 0);
-      }
-    }
-
-    function drop(e: DragEvent) {
-
-      e.preventDefault();
-
-      if (props.group !== e.dataTransfer?.getData("text/vnt-group")) return;
-
-      const draggedItemId = e.dataTransfer?.getData("text/plain");
-      const draggedIdx = tabs.findIndex((tab) => tab.id === draggedItemId);
-      const targetItem = (e.target as HTMLElement).closest(".vp-item");
-      const targetId = targetItem?.id.slice(0, targetItem.id.lastIndexOf("-tab"));
-      const targetIdx = tabs.findIndex((tab) => tab.id === targetId);
-
-      if (draggedIdx !== targetIdx) {
-
-        [tabs[draggedIdx], tabs[targetIdx]] = [tabs[targetIdx], tabs[draggedIdx]];
-        tabs.splice(0, 0);
-      }
-    }
+    const { dragOver, dragStart, drop } = useDragDrop(props.group);
 
     return {
       actions,
       classes,
       contextMenu,
+      dragOver,
+      dragStart,
+      drop,
       onMenuClick,
       showContextMenu,
-      dragStart,
-      dragOver,
-      drop,
     };
   },
 });

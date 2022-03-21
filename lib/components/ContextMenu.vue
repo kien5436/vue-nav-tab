@@ -1,7 +1,7 @@
 <script lang="ts">
 import { ComputedRef, computed, defineComponent, nextTick, onMounted, onUnmounted, reactive, ref } from "vue";
 
-import { debounce } from "../debounce";
+import { debounce } from "../utils/debounce";
 
 export default defineComponent({
   name: "ContextMenu",

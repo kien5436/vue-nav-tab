@@ -36,6 +36,31 @@ npm i vue-nav-tab
 
 Please refer to [documentation](https://kien5436.github.io/vue-nav-tab/)
 
+## Contribution
+
+If you want to contribute for this project, feel free to create pull request but please follow the guide:
+
+- Comply with [eslint](https://eslint.org/)
+- Choose `dev` branch for developing and merging
+
+To test this library locally:
+
+```sh
+# build
+yarn build
+
+# create portable module
+yarn pack
+
+# copy the vue-nav-tab-<version>.tgz file to the root of consumer project and add it as dependency
+"dependencies": {
+  "vue-nav-tab": "file:vue-nav-tab-<version>.tgz"
+}
+
+# install it
+yarn
+```
+
 ## License
 
 [MIT](LICENSE)

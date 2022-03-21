@@ -1,8 +1,8 @@
 import { computed, inject, ref } from "vue";
 
-import { refreshTab, removeAll, removeLeft, removeOthers, removeRight, removeTab } from "./operations";
-import ContextMenu from "./ContextMenu.vue";
-import VueNavTabError from "./error";
+import { refreshTab, removeAll, removeLeft, removeOthers, removeRight, removeTab } from "./use-operations";
+import ContextMenu from "../components/ContextMenu.vue";
+import VueNavTabError from "../utils/error";
 
 export interface ContextMenuLocale {
   [key: string]: {

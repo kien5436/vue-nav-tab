@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
-import { refreshTab } from "../../lib/operations";
+import { refreshTab } from "../../lib/hooks/use-operations";
 
 export default defineComponent({
   name: "Profile",

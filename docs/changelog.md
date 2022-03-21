@@ -1,3 +1,7 @@
+##### v2.2.1
+
+- Fix drag'n'drop error when dragged into other elements
+
 ##### v2.2.0
 
 - Add drag'n'drop feature
