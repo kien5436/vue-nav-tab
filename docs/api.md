@@ -97,3 +97,15 @@ Remove all tabs in `group` except the tab with `tabId` and non-`closable` tabs.
 - `refreshTab(group: string, tabId: string): void`
 
 Refresh specific tab in `group`. By default, when you switch between tabs, their states is preserved. This function helps you get rid of stale data in the tab.
+
+##### onTabActivated
+
+- `onTabActivated(group: string, callback: (currentTab: Tab) => void): void`
+
+Triggered whenever a tab is visible to the user. Useful when you want to do some actions, e.g. add event listeners when activate a tab.
+
+##### onTabDeactivated
+
+- `onTabDeactivated(group: string, callback: (lastTab: Tab) => void): void`
+
+Triggered whenever a tab is invisible to the user. Useful when you want to do some actions, e.g. clean event listeners when component was mounted.

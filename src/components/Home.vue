@@ -9,24 +9,17 @@ export default defineComponent({
   setup() {
 
     const group = "base.home";
-    const tabsList: Tab[] = [{
-      active: true,
-      closable: true,
-      id: "1",
-      title: "nested tab 1",
-      view: HelloWorld,
-      viewProps: { msg: "hello nested tab 1" },
-    }];
+    const tabsList: Tab[] = [];
 
-    for (let i = 2; 50 > i; i++) {
+    for (let i = 1; 50 > i; i++) {
 
       tabsList.push({
-        active: false,
+        active: 1 === i,
         closable: true,
         id: i.toString(),
         title: `nested tab ${i}`,
         view: HelloWorld,
-        viewProps: { msg: `hello nested tab ${i}` },
+        viewProps: { msg: `hello nested tab ${i}`, tabGroup: group },
       });
     }
 

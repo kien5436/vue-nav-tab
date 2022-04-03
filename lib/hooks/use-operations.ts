@@ -1,4 +1,4 @@
-import { Component, ComputedRef, Ref, VNode, computed, markRaw, reactive, ref } from "vue";
+import { Component, ComputedRef, Ref, VNode, computed, markRaw, onActivated, onDeactivated, reactive, ref, toRaw } from "vue";
 
 import VueNavTabError, { MISSING_REQUIRED_PROPS } from "../utils/error";
 import BlankTabView from "../components/BlankTabView.vue";
@@ -101,7 +101,7 @@ export function addTab(group: string, tab: Tab) {
   }
 
   const tabs = useTabs(group);
-  const cookedTab = {
+  const cookedTab: Tab = {
     ...tab,
     _key: tab.id,
     active: !!tab.active,
@@ -176,6 +176,7 @@ export function removeTab(group: string, tabId: string) {
   }
 
   if (currentTab.value.active) {
+
     const prevTabIdx = currentTabIdx - 1;
     const nextTabIdx = currentTabIdx + 1;
 
@@ -337,4 +338,21 @@ export function removeAbove(group: string, tabId: string) {
 
 export function removeBelow(group: string, tabId: string) {
   removeRight(group, tabId);
+}
+
+// eslint-disable-next-line no-unused-vars
+export function onTabActivated(group: string, callback: (currentTab: Tab) => void) {
+
+  const currentTab = toRaw(useCurrentTab(group).value);
+
+  onActivated(() => callback(currentTab));
+}
+
+
+// eslint-disable-next-line no-unused-vars
+export function onTabDeactivated(group: string, callback: (lastTab: Tab) => void) {
+
+  const currentTab = toRaw(useCurrentTab(group).value);
+
+  onDeactivated(() => callback(currentTab));
 }

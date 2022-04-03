@@ -20,4 +20,6 @@
   - [removeBelow](api.md#removebelow 'vue-nav-tab | removeBelow')
   - [removeOthers](api.md#removeothers 'vue-nav-tab | removeOthers')
   - [refreshTab](api.md#refreshtab 'vue-nav-tab | refreshTab')
+  - [onTabActivated](api.md#onTabActivated 'vue-nav-tab | onTabActivated')
+  - [onTabDeactivated](api.md#onTabDeactivated 'vue-nav-tab | onTabDeactivated')
 - [Changelog](changelog.md 'vue-nav-tab | Changelog')

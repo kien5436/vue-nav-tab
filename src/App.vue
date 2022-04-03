@@ -39,7 +39,7 @@ export default defineComponent({
         id: "new" + id,
         title: "new tab " + id,
         view: HelloWorld,
-        viewProps: { msg: "new tab " + id },
+        viewProps: { msg: "new tab " + id, tabGroup: group },
       });
     }
 
@@ -57,8 +57,6 @@ export default defineComponent({
     return {
       addNewTab,
       group,
-      onCloseTab,
-      onTabChanged,
       openProfile,
       tabs,
     };
