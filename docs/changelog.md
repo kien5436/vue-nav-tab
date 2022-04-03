@@ -1,3 +1,6 @@
+##### v2.3.0
+- Add events to determine whenever tab is active or inactive
+
 ##### v2.2.1
 
 - Fix drag'n'drop error when dragged into other elements
