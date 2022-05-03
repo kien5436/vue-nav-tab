@@ -1,4 +1,4 @@
-> *This is the guide for v2.x and above, if you use v1.x, please see [here](v1/quick-start.md)*
+> *v1.x is deprecated due to many bugs and lack of features*
 
 #### Prerequisites
 

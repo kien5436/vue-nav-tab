@@ -48,10 +48,10 @@
 }
 
 @font-face {
-  font-family: 'icomoon';
-  src: url('fonts/icomoon.ttf?vkbuum') format('truetype'),
-    url('fonts/icomoon.woff?vkbuum') format('woff'),
-    url('fonts/icomoon.svg?vkbuum#icomoon') format('svg');
+  font-family: 'vp';
+  src: url('fonts/vp.ttf?vkbuum') format('truetype'),
+    url('fonts/vp.woff?vkbuum') format('woff'),
+    url('fonts/vp.svg?vkbuum#vp') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -59,7 +59,7 @@
 
 .vp-icon {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
+  font-family: 'vp' !important;
   speak: never;
   font-style: normal;
   font-weight: normal;

@@ -66,8 +66,10 @@ export default defineComponent({
 
 <template>
   <div class="vp-container vp-mx-auto">
-    <button type="button" @click="addNewTab">add new tab</button>
-    <button type="button" @click="openProfile">open profile</button>
+    <div class="vp-mb-3">
+      <button type="button" @click="addNewTab">add new tab</button>
+      <button type="button" @click="openProfile">open profile</button>
+    </div>
 
     <h-tabs :group="group" :tabs="tabs" />
 

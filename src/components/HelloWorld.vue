@@ -1,4 +1,5 @@
 <script>
+import { onActivated, onMounted } from "vue";
 import { onTabActivated, onTabDeactivated } from "../../lib";
 
 export default {
@@ -9,15 +10,15 @@ export default {
   },
   setup(props) {
 
-    onTabActivated(props.tabGroup, (currentTab) => {
+    // onTabActivated(props.tabGroup, (currentTab) => {
 
-      console.debug("HelloWorld.vue: onTabActivated", currentTab.id);
-    });
+    //   console.debug("HelloWorld.vue: onTabActivated", currentTab.id);
+    // });
 
-    onTabDeactivated(props.tabGroup, (lastTab) => {
+    // onTabDeactivated(props.tabGroup, (lastTab) => {
 
-      console.debug("HelloWorld.vue: onTabDeactivated", lastTab.id);
-    });
+    //   console.debug("HelloWorld.vue: onTabDeactivated", lastTab.id);
+    // });
   },
 };
 </script>
