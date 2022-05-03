@@ -108,4 +108,4 @@ Triggered whenever a tab is visible to the user. Useful when you want to do some
 
 - `onTabDeactivated(group: string, callback: (lastTab: Tab) => void): void`
 
-Triggered whenever a tab is invisible to the user. Useful when you want to do some actions, e.g. clean event listeners when component was mounted.
+Triggered whenever a tab is invisible to the user. Useful when you want to do some actions, e.g. clean event listeners attached to component when it was mounted.

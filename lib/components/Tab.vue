@@ -41,8 +41,8 @@ export default defineComponent({
       "vp-pr-4 vp-justify-center": !props.closable,
       "vp-pr-8 vp-justify-start": props.closable,
       "vp-rounded": props.rounded && "none" === props.direction,
-      "vp-rounded-b": props.rounded && "bottom" === props.direction,
-      "vp-rounded-t": props.rounded && "top" === props.direction,
+      "vp-rounded-b": props.rounded && "top" === props.direction,
+      "vp-rounded-t": props.rounded && "bottom" === props.direction,
       "vp-text-gray-100 !vp-text-gray-500 !vp-bg-gray-100 vp-pointer-events-none": "_" === props.tabId,
     }));
     const computedTabId = computed(() => `${props.tabId}-tab`);

@@ -48,7 +48,7 @@ If you want to custom how tabs look like, you can use `style` or `class` props t
 
 - Optional
 - Type: `string "top" | "bottom"`
-- Default: `"top"`
+- Default: `"bottom"`
 
 Set navbar **border** is above or below tab view. Don't be confused that it will set the position for tabs in the page. This library is designed for easy customization so where to place the elements is up to you.
 

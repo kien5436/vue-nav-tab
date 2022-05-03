@@ -1,4 +1,9 @@
+##### v2.4.0
+
+- Add scrollbar
+
 ##### v2.3.0
+
 - Add events to determine whenever tab is active or inactive
 
 ##### v2.2.1
