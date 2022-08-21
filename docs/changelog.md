@@ -1,3 +1,8 @@
+##### v2.4.1
+
+- Reduce some unnecessary code
+- Make the tab's context menu look more precise with its functionality
+
 ##### v2.4.0
 
 - Add scrollbar
