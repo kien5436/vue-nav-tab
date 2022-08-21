@@ -98,7 +98,7 @@ If you want a tab with icon like browser tab, you can pass your custom component
 
 ```html
 <template>
-  <img src="https://www.google.com/favicon.ico" />
+  <img src="/favicon.ico" />
   <span>Custom tab title</span>
 </template>
 ```

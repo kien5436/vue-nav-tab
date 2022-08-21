@@ -73,5 +73,6 @@
     "url": "https://github.com/kien5436/vue-nav-tab.git",
     "type": "git"
   },
-  "homepage": "https://kien5436.github.io/vue-nav-tab/"
+  "homepage": "https://kien5436.github.io/vue-nav-tab/",
+  "dependencies": {}
 }
