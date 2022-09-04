@@ -99,7 +99,7 @@ export default defineComponent({
 <template>
 <a
   ref="tab"
-  class="vp-flex vp-text-gray-600 vp-items-center !vp-no-underline vp-h-10 vp-box-border vp-transition vp-min-w-[7.5rem] vp-pl-4 vp-max-w-xs vp-absolute vp-cursor-pointer vp-font-sans vp-item"
+  class="vp-flex vp-text-gray-600 vp-items-center !vp-no-underline vp-h-10 vp-box-border vp-transition vp-pl-4 vp-absolute vp-cursor-pointer vp-font-sans vp-item"
   :class="classes"
   :id="computedTabId"
   draggable="true"
