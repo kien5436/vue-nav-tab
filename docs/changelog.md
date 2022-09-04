@@ -1,3 +1,7 @@
+##### v2.4.2
+
+- Change width of horizontal tabs to dynamic width
+
 ##### v2.4.1
 
 - Reduce some unnecessary code
