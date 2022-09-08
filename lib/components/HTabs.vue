@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Component, PropType, computed, defineComponent, nextTick, onBeforeUpdate, onMounted, ref, toRefs, watch } from "vue";
+import { PropType, computed, defineComponent, nextTick, toRefs, watch } from "vue";
 
 import ContextMenu from "./ContextMenu.vue";
 import ContextMenuList from "./ContextMenuList.vue";
@@ -61,9 +61,11 @@ export default defineComponent({
     const tabRefs: InstanceType<typeof Tab>[] = [];
 
     // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-    watch(tabs, async (_) => {
+    watch(tabs, async (newVal) => {
 
       await nextTick();
+
+      tabRefs.length = newVal.length;
 
       for (let i = 0, l = tabRefs.length; i < l; i++) {
 
@@ -82,8 +84,6 @@ export default defineComponent({
       deep: true,
       immediate: true,
     });
-
-    onBeforeUpdate(() => (tabRefs.length = 0));
 
     function createTabRef(el: InstanceType<typeof Tab>, index: number) {
 
