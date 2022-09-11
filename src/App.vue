@@ -11,6 +11,7 @@ const Profile = defineAsyncComponent(() => import("./components/Profile.vue"));
 export default defineComponent({
   name: "App",
   setup() {
+    let tabCount = 1;
     const group = "base";
     const tabs = createTabs(group, [
       {
@@ -35,11 +36,11 @@ export default defineComponent({
       addTab(group, {
         active: true,
         closable: 0.5 <= id,
-        hoverTitle: "new tab " + id,
+        hoverTitle: "New tab " + tabCount,
         id: "new" + id,
-        title: "new tab " + id,
+        title: "New tab " + tabCount,
         view: HelloWorld,
-        viewProps: { msg: "new tab " + id, tabGroup: group },
+        viewProps: { msg: "New tab " + tabCount++, tabGroup: group },
       });
     }
 

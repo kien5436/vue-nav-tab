@@ -27,24 +27,26 @@ createApp(App).use(VueNavTab).mount('#app');
 
 ```vue
 <script>
-import { addTab, createTabs } from 'vue-nav-tab';
-import { defineComponent } from 'vue';
+import "bulma/css/bulma.min.css";
+import { addTab, createTabs } from "vue-nav-tab";
 
-import HelloWorld from './components/HelloWorld.vue';
-import Profile from './components/Profile.vue';
+import HelloWorld from "./components/HelloWorld.vue";
+import Profile from "./components/Profile.vue";
+import Home from "./components/Home.vue";
 
-export default defineComponent({
-  name: 'App',
+export default {
+  name: "App",
   setup() {
-    const group = 'base';
+    let tabCount = 1;
+    const group = "base";
     const tabs = createTabs(group, [
       {
         active: true,
         closable: false,
-        id: 'home',
-        title: 'Home',
-        view: HelloWorld,
-        viewProps: { msg: 'Hello world from Home' },
+        id: "home",
+        title: "Home",
+        hoverTitle: "Home",
+        view: Home,
       },
     ]);
 
@@ -54,10 +56,11 @@ export default defineComponent({
       addTab(group, {
         active: true,
         closable: true,
-        id: 'new' + id,
-        title: 'New tab ' + id,
+        id: "new" + id,
+        title: "New tab " + tabCount,
+        hoverTitle: "New tab " + tabCount,
         view: HelloWorld,
-        viewProps: { msg: 'new tab ' + id },
+        viewProps: { msg: "new tab " + tabCount++ },
       });
     }
 
@@ -65,8 +68,9 @@ export default defineComponent({
       addTab(group, {
         active: true,
         closable: true,
-        id: 'profile',
-        title: 'Profile',
+        id: "profile",
+        title: "Profile",
+        hoverTitle: "Profile",
         view: Profile,
       });
     }
@@ -78,30 +82,42 @@ export default defineComponent({
       tabs,
     };
   },
-});
+};
 </script>
 
 <template>
-  <div class="container">
-    <button type="button" @click="addNewTab">add new tab</button>
-    <button type="button" @click="openProfile">open profile</button>
+  <div class="container p-3">
+    <div class="field is-grouped">
+      <p class="control">
+        <button type="button" class="button is-small" @click="addNewTab">
+          Add new tab
+        </button>
+      </p>
+      <p class="control">
+        <button type="button" class="button is-small" @click="openProfile">
+          Open "Profile" tab
+        </button>
+      </p>
+    </div>
 
-    <h-tabs :group="group" :tabs="tabs" />
+    <h-tabs :group="group" :tabs="tabs" rounded />
 
-    <tab-view :group="group" />
+    <tab-view :group="group" style="height: 400px" />
   </div>
 </template>
 ```
 
-Next, create `Profile` component in `src/components/Profile.vue`:
+Next, create `Profile` and `Home` component:
+
+`src/components/Profile.vue`:
 
 ```vue
 <script>
-import { defineComponent, ref } from 'vue';
-import { refreshTab } from 'vue-nav-tab';
+import { ref } from "vue";
+import { refreshTab } from "vue-nav-tab";
 
-export default defineComponent({
-  name: 'Profile',
+export default {
+  name: "Profile",
   setup() {
     const count = ref(0);
 
@@ -111,16 +127,41 @@ export default defineComponent({
 
     return { count, refreshThisTab };
   },
-});
+};
 </script>
 
 <template>
-  <h1>Profile</h1>
-  <p>
-    You click button <span style="color:#f00">{{ count }}</span> times
-  </p>
-  <button type="button" @click="count++">increase</button>
-  <button type="button" @click="refreshThisTab">reload this tab (or try tab context menu)</button>
+  <div class="content p-3">
+    <h1>Profile</h1>
+    <p>
+      You click button <span class="has-text-danger">{{ count }}</span> times
+    </p>
+    <button type="button" class="button is-small" @click="count++">
+      Increase
+    </button>
+    <button type="button" class="button is-small" @click="refreshThisTab">
+      Reload this tab (or try tab context menu)
+    </button>
+  </div>
+</template>
+```
+
+`src/components/Home.vue`
+
+```vue
+<script>
+export default {
+  name: "Home",
+};
+</script>
+
+<template>
+  <iframe
+    src="https://kien5436.github.io/vue-nav-tab/"
+    width="100%"
+    height="100%"
+    frameborder="0"
+  ></iframe>
 </template>
 ```
 

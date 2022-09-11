@@ -60,7 +60,6 @@ export default defineComponent({
     const { tabs } = toRefs(props);
     const tabRefs: InstanceType<typeof Tab>[] = [];
 
-    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     watch(tabs, async (newVal) => {
 
       await nextTick();
