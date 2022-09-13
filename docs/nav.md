@@ -173,7 +173,7 @@ export default {
       closable: false,
       id: 'home',
       title: 'Home',
-      view: HelloWorld,
+      view: Home,
     }]);
 ...
   }
