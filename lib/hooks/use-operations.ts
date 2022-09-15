@@ -11,6 +11,7 @@ export interface Tab {
   title: string | Component | VNode;
   hoverTitle?: string;
   titleProps?: unknown;
+  hasIframe?: boolean;
   view: Component | VNode;
   viewProps?: unknown;
 }
@@ -53,9 +54,10 @@ export function createTabs(group: string, tabs: Tab[]) {
   const _tabs = ref<Tab[]>(
     tabs.map((tab) => ({
       ...tab,
-      _key: tab.id,
+      _key: tab.id + "~",
       active: !!tab.active,
       closable: !!tab.closable,
+      hasIframe: !!tab.hasIframe,
       title: !isPrimitiveType(tab.title) ? markRaw(tab.title as Component) : tab.title.toString(),
       view: markRaw(tab.view),
     }))
@@ -103,9 +105,10 @@ export function addTab(group: string, tab: Tab) {
   const tabs = useTabs(group);
   const cookedTab: Tab = {
     ...tab,
-    _key: tab.id,
+    _key: tab.id + "~",
     active: !!tab.active,
     closable: !!tab.closable,
+    hasIframe: !!tab.hasIframe,
     title: !isPrimitiveType(tab.title) ? markRaw(tab.title as Component) : tab.title.toString(),
     view: markRaw(tab.view),
   };
@@ -116,7 +119,7 @@ export function addTab(group: string, tab: Tab) {
     if (removedTabsGroup[group][i] === tab.id) {
 
       wasRemoved = true;
-      cookedTab._key = cookedTab.id + Date.now();
+      cookedTab._key = `${cookedTab.id}~${Date.now()}`;
       removedTabsGroup[group].splice(i, 1);
       break;
     }
@@ -200,7 +203,7 @@ export function refreshTab(group: string, tabId: string) {
     throw new VueNavTabError(`'${tabId}' doesn't exist in group '${group}'`);
   }
 
-  tabs.splice(selectedTabIdx, 1, { ...tabs[selectedTabIdx], _key: tabId + Date.now() });
+  tabs.splice(selectedTabIdx, 1, { ...tabs[selectedTabIdx], _key: `${tabId}~${Date.now()}` });
 
   for (const key in tabsGroup) {
 

@@ -7,7 +7,8 @@ interface Tab {
   id: string; // unique id for the tab
   title: string | Component | VNode; // tab's title, can be a string or complex component
   hoverTitle?: string; // provide tooltips when hovering over the tab
-  titleProps: unknown; // passing `props` to title if it is a component
+  titleProps?: unknown; // passing `props` to title if it is a component
+  hasIframe?: boolean; // use it when your view contains iframe(s)
   view: Component | VNode; // the view which will be displayed in <tab-view />
   viewProps?: unknown; // passing `props` if your view need some props from parent component
 }

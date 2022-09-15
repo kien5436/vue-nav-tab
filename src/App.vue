@@ -7,6 +7,7 @@ import HomeTab from "./components/HomeTab.vue";
 
 const HelloWorld = defineAsyncComponent(() => import("./components/HelloWorld.vue"));
 const Profile = defineAsyncComponent(() => import("./components/Profile.vue"));
+const External = defineAsyncComponent(() => import("./components/External.vue"));
 
 export default defineComponent({
   name: "App",
@@ -55,9 +56,22 @@ export default defineComponent({
       });
     }
 
+    function openIframe() {
+
+      addTab(group, {
+        active: true,
+        closable: true,
+        hasIframe: true,
+        id: "iframe",
+        title: "Tab with iframe",
+        view: External,
+      });
+    }
+
     return {
       addNewTab,
       group,
+      openIframe,
       openProfile,
       tabs,
     };
@@ -70,6 +84,7 @@ export default defineComponent({
     <div class="vp-mb-3">
       <button type="button" @click="addNewTab">add new tab</button>
       <button type="button" @click="openProfile">open profile</button>
+      <button type="button" @click="openIframe">open iframe</button>
     </div>
 
     <h-tabs :group="group" :tabs="tabs" />

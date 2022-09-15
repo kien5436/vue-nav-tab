@@ -1,3 +1,7 @@
+##### v2.5.0
+
+- Support `iframe` embeded
+
 ##### v2.4.3
 
 - Fix position of tabs weren't updated properly when removed some tabs
