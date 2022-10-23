@@ -5,7 +5,7 @@
 - You are familiar with `Vue.js` and `Vue Single-File Components`.
 - This guide will use `ES modules` syntax for consistency. If you don't know about it, don't worry, you can start with [vue-cli](https://cli.vuejs.org/guide/installation.html), it will setup necessary things for your project.
 
-#### [Live demo](https://codesandbox.io/s/vue-nav-tab-2-example-vkl1uh)
+#### [Live demo](https://codesandbox.io/s/vue-nav-tab-2-example-xmvlip)
 
 #### Quick example
 
