@@ -17,3 +17,8 @@ export default {
 } as Plugin;
 
 export * from "./hooks/use-operations";
+export {
+  HTabs,
+  TabView,
+  VTabs,
+};

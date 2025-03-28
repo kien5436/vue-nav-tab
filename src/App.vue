@@ -1,5 +1,5 @@
 <script lang="ts">
-import { addTab, createTabs } from "../lib";
+import { HTabs, TabView, addTab, createTabs } from "../lib";
 import { defineAsyncComponent, defineComponent } from "vue";
 
 import Home from "./components/Home.vue";
@@ -87,9 +87,9 @@ export default defineComponent({
       <button type="button" @click="openIframe">open iframe</button>
     </div>
 
-    <h-tabs :group="group" :tabs="tabs" />
+    <HTabs :group="group" :tabs="tabs" />
 
-    <tab-view :group="group" />
+    <TabView :group="group" />
   </div>
 </template>
 

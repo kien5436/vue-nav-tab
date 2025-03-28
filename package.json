@@ -21,17 +21,14 @@
     "types/"
   ],
   "devDependencies": {
-    "@types/jest": "^24.0.19",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@vue/cli-plugin-babel": "~5.0.0-rc.2",
     "@vue/cli-plugin-eslint": "~5.0.0-rc.2",
     "@vue/cli-plugin-typescript": "~5.0.0-rc.2",
-    "@vue/cli-plugin-unit-jest": "~5.0.0-rc.2",
     "@vue/cli-service": "~5.0.0-rc.2",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-typescript": "^9.1.0",
-    "@vue/test-utils": "^2.0.0-0",
     "autoprefixer": "^10.4.2",
     "core-js": "^3.21.1",
     "cross-env": "^7.0.3",
@@ -39,7 +36,6 @@
     "eslint": "^7.32.0",
     "eslint-config-pk": "^1.0.2",
     "eslint-plugin-vue": "^8.0.3",
-    "jest": "^27.1.0",
     "postcss": "^8.4.6",
     "rollup": "^2.67.2",
     "rollup-plugin-banner": "^0.2.1",
@@ -49,13 +45,11 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.31.2",
     "rollup-plugin-vue": "^6.0.0",
-    "tailwindcss": "^3.0.23",
-    "ts-jest": "^27.0.4",
+    "tailwindcss": "3",
     "tslib": "^2.3.1",
     "typescript": "^4.5.5",
     "vue": "^3.2.31",
-    "vue-cli-plugin-tailwind": "^3.0.0-beta.0",
-    "vue-jest": "^5.0.0-0"
+    "vue-cli-plugin-tailwind": "^3.0.0-beta.0"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
@@ -74,5 +68,5 @@
     "type": "git"
   },
   "homepage": "https://kien5436.github.io/vue-nav-tab/",
-  "dependencies": {}
+  "packageManager": "yarn@4.7.0"
 }

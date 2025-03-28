@@ -34,7 +34,7 @@ export default defineComponent({
 
     onMounted(() => {
       document.addEventListener("keyup", onKeyUp, false);
-      document.addEventListener("click", close, false);
+      document.addEventListener("click", _close, false);
       document.addEventListener("scroll", debouncedClose, false);
       boundingEl.value.addEventListener("scroll", debouncedClose, false);
       window.addEventListener("resize", debouncedClose, false);
@@ -42,7 +42,7 @@ export default defineComponent({
 
     onUnmounted(() => {
       document.removeEventListener("keyup", onKeyUp, false);
-      document.removeEventListener("click", close, false);
+      document.removeEventListener("click", _close, false);
       document.removeEventListener("scroll", debouncedClose, false);
       boundingEl.value.removeEventListener("scroll", debouncedClose, false);
       window.removeEventListener("resize", debouncedClose, false);
@@ -63,11 +63,18 @@ export default defineComponent({
     }
 
     function close() {
+
       isOpen.value = false;
     }
 
     function onKeyUp(e: KeyboardEvent) {
       if ("Escape" === e.code) close();
+    }
+
+    function _close(e: MouseEvent) {
+
+      if (el.value !== (e.target as HTMLElement).closest(".vp-context-menu"))
+        close();
     }
 
     return {
@@ -81,7 +88,8 @@ export default defineComponent({
 </script>
 
 <template>
-<div ref="el" class="vp-fixed vp-outline-none vp-font-sans vp-select-none" tabindex="-1" :style="style">
-  <slot />
-</div>
+  <div ref="el" class="vp-fixed vp-outline-none vp-font-sans vp-select-none vp-context-menu" tabindex="-1"
+    :style="style">
+    <slot />
+  </div>
 </template>

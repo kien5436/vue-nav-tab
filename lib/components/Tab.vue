@@ -97,23 +97,16 @@ export default defineComponent({
 </script>
 
 <template>
-<a
-  ref="tab"
-  class="vp-flex vp-text-gray-600 vp-items-center !vp-no-underline vp-h-10 vp-box-border vp-transition vp-pl-4 vp-absolute vp-cursor-pointer vp-font-sans vp-item"
-  :class="classes"
-  :id="computedTabId"
-  draggable="true"
-  @click="activateTab"
->
-  <div class="vp-truncate vp-text-clip vp-flex vp-items-center vp-box-border">
-    <slot />
-  </div>
-  <span
-    v-if="closable"
-    class="vp-absolute vp-top-2 vp-right-1 vp-w-6 vp-h-6 hover:vp-bg-gray-200 vp-rounded-sm vp-inline-flex vp-items-center vp-justify-center vp-box-border"
-    @click.stop.prevent="closeTab"
-  >
-    <i class="vp-icon vp-icon-x"></i>
-  </span>
-</a>
+  <a ref="tab"
+    class="vp-flex vp-text-gray-600 vp-items-center !vp-no-underline vp-h-10 vp-box-border vp-transition vp-pl-4 vp-absolute vp-cursor-pointer vp-font-sans vp-item"
+    :class="classes" :id="computedTabId" draggable="true" @click="activateTab" role="tab">
+    <div class="vp-truncate vp-text-clip vp-flex vp-items-center vp-box-border">
+      <slot />
+    </div>
+    <span v-if="closable"
+      class="vp-absolute vp-top-2 vp-right-1 vp-w-6 vp-h-6 hover:vp-bg-gray-200 vp-rounded-sm vp-inline-flex vp-items-center vp-justify-center vp-box-border"
+      @click.stop.prevent="closeTab">
+      <i class="vp-icon vp-icon-x"></i>
+    </span>
+  </a>
 </template>

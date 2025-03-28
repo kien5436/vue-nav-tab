@@ -107,37 +107,22 @@ export default defineComponent({
 </script>
 
 <template>
-<x-scrollbar :class="scrollbarClass">
-  <nav
-    class="vp-flex vp-flex-nowrap vp-border-0 vp-m-0 vp-p-0 vp-h-10 vp-box-border vp-bg-transparent vp-select-none vp-relative vp-nav"
-    :class="navClass"
-    @dragstart="dragStart"
-    @dragover="dragOver"
-    @drop="drop"
-  >
-    <tab
-      v-for="(tab, i) in tabs"
-      :ref="el => createTabRef(el, i)"
-      :key="tab.id"
-      :tab-id="tab.id"
-      :active="tab.active"
-      :closable="tab.closable"
-      :title="tab.hoverTitle"
-      :group="group"
-      :rounded="rounded"
-      :direction="position"
-      class="vp-top-0"
-      @contextmenu.prevent="showContextMenu($event, tab.id)"
-    >
-      <span v-if="typeof tab.title === 'string'">
-        {{ tab.title }}
-      </span>
-      <component :is="tab.title" v-bind="tab.titleProps" v-else />
-    </tab>
+  <x-scrollbar :class="scrollbarClass">
+    <nav
+      class="vp-flex vp-flex-nowrap vp-border-0 vp-m-0 vp-p-0 vp-h-10 vp-box-border vp-bg-transparent vp-select-none vp-relative vp-nav"
+      :class="navClass" @dragstart="dragStart" @dragover="dragOver" @drop="drop" role="tablist">
+      <tab v-for="(tab, i) in tabs" :ref="el => createTabRef(el, i)" :key="tab.id" :tab-id="tab.id" :active="tab.active"
+        :closable="tab.closable" :title="tab.hoverTitle" :group="group" :rounded="rounded" :direction="position"
+        class="vp-top-0" @contextmenu.prevent="showContextMenu($event, tab.id)">
+        <span v-if="typeof tab.title === 'string'">
+          {{ tab.title }}
+        </span>
+        <component :is="tab.title" v-bind="tab.titleProps" v-else />
+      </tab>
 
-    <context-menu ref="contextMenu" boundingView=".vp-nav">
-      <context-menu-list :actions="actions" :onMenuClick="onMenuClick" />
-    </context-menu>
-  </nav>
-</x-scrollbar>
+      <context-menu ref="contextMenu" boundingView=".vp-nav">
+        <context-menu-list :actions="actions" :onMenuClick="onMenuClick" />
+      </context-menu>
+    </nav>
+  </x-scrollbar>
 </template>

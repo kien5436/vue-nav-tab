@@ -82,20 +82,26 @@ export function mergeWithDefaultLocales(options: ContextMenuLocale) {
   return i18n;
 }
 
+export interface Action {
+  disabled: boolean;
+  id: string;
+  text: string;
+}
+
 export function useContextMenu(group: string, navType: "vertical" | "horizontal") {
 
   const contextMenu = ref<InstanceType<typeof ContextMenu> | null>(null);
   let tabContext: string | null = null;
   const i18n = inject<ContextMenuLocale>(key, defaultLocales);
   const lang = ref("en");
-  const disabledActions = reactive({
+  const disabledActions: Record<string, boolean> = reactive({
     close: false,
     closeAbove: false,
     closeBelow: false,
     closeLeft: false,
     closeRight: false,
   });
-  const actions = computed(() => [
+  const actions = computed<Action[]>(() => [
     {
       disabled: false,
       id: "reload",
@@ -142,6 +148,10 @@ export function useContextMenu(group: string, navType: "vertical" | "horizontal"
 
   function onMenuClick(actionId: string) {
 
+    if (disabledActions[actionId]) {
+      return;
+    }
+
     contextMenu.value?.close();
 
     if (!tabContext) {
@@ -172,7 +182,7 @@ export function useContextMenu(group: string, navType: "vertical" | "horizontal"
     }
   }
 
-  function disableActions(tabId:string) {
+  function disableActions(tabId: string) {
 
     const tabs = useTabs(group);
     const selectedTabIdx = tabs.findIndex((tab) => tab.id === tabId);

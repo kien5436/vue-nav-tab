@@ -87,30 +87,18 @@ export default defineComponent({
 </script>
 
 <template>
-<div
-  class="vp-overflow-hidden vp-h-10 vp-relative"
-  @mouseenter="trackUserMovement"
-  @mouseleave="trackUserMovement"
->
-  <div
-    ref="navWrapper"
-    class="vp-h-full vp-overflow-x-auto vp-overflow-y-hidden -vp-mb-4 vp-pb-4 vp-box-content"
-    @scroll="scrollThumb">
-    <slot />
-  </div>
+  <div class="vp-overflow-hidden vp-h-10 vp-relative" @mouseenter="trackUserMovement" @mouseleave="trackUserMovement">
+    <div ref="navWrapper"
+      class="vp-h-full vp-overflow-x-auto vp-overflow-y-hidden -vp-mb-4 vp-pb-4 vp-box-content vp-scroller"
+      @scroll="scrollThumb">
+      <slot />
+    </div>
 
-  <div
-    v-show="showScrollbar"
-    class="vp-absolute vp-h-1.5 vp-left-0 vp-w-full vp-bottom-0">
-    <div
-      ref="track"
-      class="vp-absolute vp-top-0 vp-left-0 vp-w-full vp-h-full vp-bg-slate-400/30 vp-rounded"
-      @click="onClickTrack"></div>
-    <div
-      ref="thumb"
-      class="vp-absolute vp-top-0 vp-h-full vp-bg-zinc-400 vp-rounded"
-      :style="thumbStyle"
-      @mousedown="startGrabThumb"></div>
+    <div v-show="showScrollbar" class="vp-absolute vp-h-1.5 vp-left-0 vp-w-full vp-bottom-0">
+      <div ref="track" class="vp-absolute vp-top-0 vp-left-0 vp-w-full vp-h-full vp-bg-slate-400/30 vp-rounded"
+        @click="onClickTrack"></div>
+      <div ref="thumb" class="vp-absolute vp-top-0 vp-h-full vp-bg-zinc-400 vp-rounded" :style="thumbStyle"
+        @mousedown="startGrabThumb"></div>
+    </div>
   </div>
-</div>
 </template>
