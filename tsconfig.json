@@ -15,8 +15,7 @@
     "strict": true,
     "target": "ES6",
     "types": [
-      "webpack-env",
-      "jest"
+      "webpack-env"
     ],
     "paths": {
       "@/*": [

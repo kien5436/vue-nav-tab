@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, onUpdated, ref } from "vue";
+import { computed, defineComponent, nextTick, onMounted, ref } from "vue";
 
 import { removeTab, useCurrentTab, useTabs } from "../hooks/use-operations";
 
@@ -48,9 +48,9 @@ export default defineComponent({
     const computedTabId = computed(() => `${props.tabId}-tab`);
     const tab = ref<HTMLElement | null>(null);
 
-    onMounted(() => props.active && tab.value?.scrollIntoView());
-
-    onUpdated(() => props.active && !isVisible() && tab.value?.scrollIntoView());
+    onMounted(() => {
+      nextTick(() => tab.value?.scrollIntoView());
+    });
 
     function activateTab() {
 
@@ -66,23 +66,6 @@ export default defineComponent({
     function closeTab() {
 
       removeTab(props.group, props.tabId);
-    }
-
-    function isVisible() {
-
-      const { top, left, bottom, right } = tab.value?.getBoundingClientRect() as DOMRect;
-
-      if ("none" === props.direction) {
-
-        const { top: viewTop, bottom: viewBottom } = tab.value?.closest(".vp-nav")?.getBoundingClientRect() as DOMRect;
-
-        return !(bottom < viewTop || top > viewBottom);
-      }
-      else {
-        const { left: viewLeft, right: viewRight } = tab.value?.closest(".vp-nav")?.getBoundingClientRect() as DOMRect;
-
-        return !(left > viewRight || right < viewLeft);
-      }
     }
 
     return {

@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development vue-cli-service serve",
     "build": "cross-env NODE_ENV=production rollup -c",
-    "test:unit": "vue-cli-service test:unit",
     "lint": "eslint . --ext .js,.ts,.vue --fix",
     "prepublishOnly": "yarn build",
     "docs": "docsify serve docs"
