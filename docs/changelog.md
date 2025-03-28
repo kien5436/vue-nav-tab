@@ -1,3 +1,10 @@
+##### v2.5.1
+
+- Fix tab jumps on activated
+- Better accessibility
+- Hide context menu when scroll
+- Do nothing if click on disabled menu item
+
 ##### v2.5.0
 
 - Support `iframe` embeded
