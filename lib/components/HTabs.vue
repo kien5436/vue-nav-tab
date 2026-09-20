@@ -1,16 +1,16 @@
 <script lang="ts">
-import { PropType, computed, defineComponent, nextTick, toRefs, watch } from "vue";
+import { ComponentPublicInstance, PropType, computed, defineComponent, nextTick, toRefs, watch } from 'vue';
 
-import ContextMenu from "./ContextMenu.vue";
-import ContextMenuList from "./ContextMenuList.vue";
-import { Tab as ITab } from "../hooks/use-operations";
-import Tab from "./Tab.vue";
-import XScrollbar from "./XScrollbar.vue";
-import { useContextMenu } from "../hooks/use-contextmenu";
-import useDragDrop from "../hooks/use-drag-n-drop";
+import ContextMenu from './ContextMenu.vue';
+import ContextMenuList from './ContextMenuList.vue';
+import { Tab as ITab } from '../hooks/use-operations';
+import Tab from './Tab.vue';
+import XScrollbar from './XScrollbar.vue';
+import { useContextMenu } from '../hooks/use-contextmenu';
+import useDragDrop from '../hooks/use-drag-n-drop';
 
 export default defineComponent({
-  name: "HTabs",
+  name: 'HTabs',
   components: {
     ContextMenu,
     ContextMenuList,
@@ -19,18 +19,18 @@ export default defineComponent({
   },
   props: {
     appearance: {
-      default: "tabs",
+      default: 'tabs',
       type: String,
-      validator: (val: string) => ["tabs", "pills"].includes(val),
+      validator: (val: string) => ['tabs', 'pills'].includes(val),
     },
     group: {
       required: true,
       type: String,
     },
     position: {
-      default: "bottom",
+      default: 'bottom',
       type: String,
-      validator: (val: string) => ["top", "bottom"].includes(val),
+      validator: (val: string) => ['top', 'bottom'].includes(val),
     },
     rounded: {
       default: false,
@@ -43,18 +43,18 @@ export default defineComponent({
   },
   setup(props) {
 
-    const { actions, contextMenu, onMenuClick, showContextMenu } = useContextMenu(props.group, "horizontal");
+    const { actions, contextMenu, onMenuClick, showContextMenu } = useContextMenu(props.group, 'horizontal');
     const { dragOver, dragStart, drop } = useDragDrop(props.group);
 
     const navClass = computed(() => ({
-      "vp-pills": "pills" === props.appearance,
-      "vp-tabs": "tabs" === props.appearance,
-      "vp-tabs-bottom": "top" === props.position,
+      'vp-pills': 'pills' === props.appearance,
+      'vp-tabs': 'tabs' === props.appearance,
+      'vp-tabs-bottom': 'top' === props.position,
     }));
     const scrollbarClass = computed(() => ({
-      "before:vp-bottom-px": "tabs" === props.appearance && "bottom" === props.position,
-      "before:vp-content-[''] before:vp-block before:vp-absolute before:vp-left-0 before:vp-w-full before:vp-h-px before:vp-bg-gray-300": "tabs" === props.appearance,
-      "before:vp-top-px": "tabs" === props.appearance && "top" === props.position,
+      'before:vp-bottom-px': 'tabs' === props.appearance && 'bottom' === props.position,
+      "before:vp-content-[''] before:vp-block before:vp-absolute before:vp-left-0 before:vp-w-full before:vp-h-px before:vp-bg-gray-300": 'tabs' === props.appearance,
+      'before:vp-top-px': 'tabs' === props.appearance && 'top' === props.position,
     }));
 
     const { tabs } = toRefs(props);
@@ -74,19 +74,20 @@ export default defineComponent({
         for (let j = i; 0 <= --j;) {
 
           const prevEl: HTMLElement = tabRefs[j].$el;
+
           left += prevEl.getBoundingClientRect().width;
         }
 
-        el.style.setProperty("left", `${left}px`);
+        el.style.setProperty('left', `${left}px`);
       }
     }, {
       deep: true,
       immediate: true,
     });
 
-    function createTabRef(el: InstanceType<typeof Tab>, index: number) {
+    function createTabRef(el: Element | ComponentPublicInstance | null, index: number) {
 
-      if (el) tabRefs[index] = el;
+      if (el && '$el' in el) tabRefs[index] = el as InstanceType<typeof Tab>;
     }
 
     return {

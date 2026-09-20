@@ -1,10 +1,10 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { Ref, defineComponent, ref, watch } from 'vue';
 
-import { Tab, useCurrentTab } from "../hooks/use-operations";
+import { Tab, useCurrentTab } from '../hooks/use-operations';
 
 export default defineComponent({
-  name: "TabView",
+  name: 'TabView',
   props: {
     group: {
       required: true,
@@ -14,13 +14,13 @@ export default defineComponent({
   setup(props) {
 
     const currentTab = useCurrentTab(props.group);
-    const iframes = ref<Tab[]>([]);
+    const iframes: Ref<Tab[]> = ref([]);
 
     watch(currentTab, (newVal) => {
 
       if (newVal.hasIframe && !iframes.value.some((tab) => tab._key === newVal._key)) {
 
-        iframes.value = iframes.value.filter((tab) => !tab._key?.startsWith(newVal.id + "~"));
+        iframes.value = iframes.value.filter((tab) => !tab._key?.startsWith(newVal.id + '~'));
         iframes.value.push(newVal);
       }
     }, { immediate: true });

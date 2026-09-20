@@ -18,6 +18,8 @@ Tab components for Vue.js project
 
 ## Installation
 
+Requires `Vue.js` v3.2 or later.
+
 ```sh
 yarn add vue-nav-tab
 # or

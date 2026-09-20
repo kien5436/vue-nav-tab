@@ -1,16 +1,16 @@
 <script lang="ts">
-import { PropType, defineComponent } from "vue";
+import { PropType, defineComponent } from 'vue';
 
-import ContextMenu from "./ContextMenu.vue";
-import ContextMenuList from "./ContextMenuList.vue";
-import { Tab as ITab } from "../hooks/use-operations";
-import Tab from "./Tab.vue";
-import YScrollbar from "./YScrollbar.vue";
-import { useContextMenu } from "../hooks/use-contextmenu";
-import useDragDrop from "../hooks/use-drag-n-drop";
+import ContextMenu from './ContextMenu.vue';
+import ContextMenuList from './ContextMenuList.vue';
+import { Tab as ITab } from '../hooks/use-operations';
+import Tab from './Tab.vue';
+import YScrollbar from './YScrollbar.vue';
+import { useContextMenu } from '../hooks/use-contextmenu';
+import useDragDrop from '../hooks/use-drag-n-drop';
 
 export default defineComponent({
-  name: "VTabs",
+  name: 'VTabs',
   components: {
     ContextMenu,
     ContextMenuList,
@@ -33,7 +33,7 @@ export default defineComponent({
   },
   setup(props) {
 
-    const { actions, contextMenu, onMenuClick, showContextMenu } = useContextMenu(props.group, "vertical");
+    const { actions, contextMenu, onMenuClick, showContextMenu } = useContextMenu(props.group, 'vertical');
     const { dragOver, dragStart, drop } = useDragDrop(props.group);
 
     return {

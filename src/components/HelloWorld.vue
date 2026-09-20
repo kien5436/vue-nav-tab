@@ -1,8 +1,8 @@
 <script>
-import { onTabActivated, onTabDeactivated } from "../../lib";
+import { onTabActivated, onTabDeactivated } from '../../lib';
 
 export default {
-  name: "HelloWorld",
+  name: 'HelloWorld',
   props: {
     msg: String,
     tabGroup: String,

@@ -1,10 +1,10 @@
 <script lang="ts">
-import { computed, defineComponent, nextTick, onMounted, ref } from "vue";
+import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 
-import { removeTab, useCurrentTab, useTabs } from "../hooks/use-operations";
+import { removeTab, useCurrentTab, useTabs } from '../hooks/use-operations';
 
 export default defineComponent({
-  name: "Tab",
+  name: 'Tab',
   props: {
     active: {
       default: false,
@@ -17,7 +17,7 @@ export default defineComponent({
     direction: {
       required: true,
       type: String,
-      validator: (val: string) => ["top", "bottom", "none"].includes(val),
+      validator: (val: string) => ['top', 'bottom', 'none'].includes(val),
     },
     group: {
       required: true,
@@ -37,13 +37,13 @@ export default defineComponent({
     const tabs = useTabs(props.group);
     const currentTab = useCurrentTab(props.group);
     const classes = computed(() => ({
-      "vp-item-active": props.active,
-      "vp-pr-4 vp-justify-center": !props.closable,
-      "vp-pr-8 vp-justify-start": props.closable,
-      "vp-rounded": props.rounded && "none" === props.direction,
-      "vp-rounded-b": props.rounded && "top" === props.direction,
-      "vp-rounded-t": props.rounded && "bottom" === props.direction,
-      "vp-text-gray-100 !vp-text-gray-500 !vp-bg-gray-100 vp-pointer-events-none": "_" === props.tabId,
+      'vp-item-active': props.active,
+      'vp-pr-4 vp-justify-center': !props.closable,
+      'vp-pr-8 vp-justify-start': props.closable,
+      'vp-rounded': props.rounded && 'none' === props.direction,
+      'vp-rounded-b': props.rounded && 'top' === props.direction,
+      'vp-rounded-t': props.rounded && 'bottom' === props.direction,
+      'vp-text-gray-100 !vp-text-gray-500 !vp-bg-gray-100 vp-pointer-events-none': '_' === props.tabId,
     }));
     const computedTabId = computed(() => `${props.tabId}-tab`);
     const tab = ref<HTMLElement | null>(null);

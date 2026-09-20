@@ -3,19 +3,16 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "declaration": true,
-    "declarationDir": "types",
     "esModuleInterop": true,
-    "importHelpers": true,
     "jsx": "preserve",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "sourceMap": true,
     "strict": true,
-    "target": "ES6",
+    "target": "ES2015",
     "types": [
-      "webpack-env"
+      "vite/client"
     ],
     "paths": {
       "@/*": [
@@ -30,10 +27,12 @@
     ]
   },
   "include": [
-    "src/**/*",
     "lib/**/*",
+    "src/**/*"
   ],
   "exclude": [
-    "node_modules"
+    "dist",
+    "node_modules",
+    "types"
   ]
 }

@@ -1,8 +1,8 @@
 <script lang="ts">
-import { computed, defineComponent, reactive, ref } from "vue";
+import { computed, defineComponent, reactive, ref } from 'vue';
 
 export default defineComponent({
-  name: "YScrollbar",
+  name: 'YScrollbar',
   setup() {
 
     const navWrapper = ref<HTMLElement | null>(null);
@@ -21,10 +21,10 @@ export default defineComponent({
 
       navWrapperScrollPos.top = navWrapper.value ? navWrapper.value.scrollTop : 0;
       navWrapperScrollPos.y = e.clientY;
-      document.body.style.setProperty("user-select", "none");
+      document.body.style.setProperty('user-select', 'none');
 
-      document.addEventListener("mousemove", moveThumb, false);
-      document.addEventListener("mouseup", stopGrabThumb, false);
+      document.addEventListener('mousemove', moveThumb, false);
+      document.addEventListener('mouseup', stopGrabThumb, false);
     }
 
     function moveThumb(e: MouseEvent) {
@@ -37,9 +37,9 @@ export default defineComponent({
 
     function stopGrabThumb() {
 
-      document.body.style.removeProperty("user-select");
-      document.removeEventListener("mousemove", moveThumb, false);
-      document.removeEventListener("mouseup", stopGrabThumb, false);
+      document.body.style.removeProperty('user-select');
+      document.removeEventListener('mousemove', moveThumb, false);
+      document.removeEventListener('mouseup', stopGrabThumb, false);
     }
 
     function scrollThumb() {
@@ -48,7 +48,7 @@ export default defineComponent({
 
         if (navWrapper.value && thumb.value) {
 
-          thumb.value.style.setProperty("top", `${navWrapper.value.scrollTop / navWrapper.value.scrollHeight * 100}%`);
+          thumb.value.style.setProperty('top', `${navWrapper.value.scrollTop / navWrapper.value.scrollHeight * 100}%`);
         }
       });
     }
@@ -59,6 +59,7 @@ export default defineComponent({
 
       const trackRect = track.value.getBoundingClientRect();
       const percentage = (e.clientY - trackRect.top) / trackRect.height;
+
       navWrapper.value.scrollTop = percentage * (navWrapper.value.scrollHeight - navWrapper.value.clientHeight);
     }
 
@@ -67,8 +68,8 @@ export default defineComponent({
       if (!navWrapper.value) return;
 
       scrollRatio.value = navWrapper.value.clientHeight / navWrapper.value.scrollHeight;
-      showScrollbar.value = "mouseenter" === e.type && 1 > scrollRatio.value;
-      thumb.value?.style.setProperty("top", `${navWrapper.value.scrollTop / navWrapper.value.scrollHeight * 100}%`);
+      showScrollbar.value = 'mouseenter' === e.type && 1 > scrollRatio.value;
+      thumb.value?.style.setProperty('top', `${navWrapper.value.scrollTop / navWrapper.value.scrollHeight * 100}%`);
     }
 
     return {

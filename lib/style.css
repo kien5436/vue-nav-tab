@@ -49,9 +49,10 @@
 
 @font-face {
   font-family: 'vp';
-  src: url('fonts/vp.ttf?vkbuum') format('truetype'),
-    url('fonts/vp.woff?vkbuum') format('woff'),
-    url('fonts/vp.svg?vkbuum#vp') format('svg');
+  /* `?no-inline`: Vite library builds inline every asset by default */
+  src: url('fonts/vp.ttf?no-inline') format('truetype'),
+    url('fonts/vp.woff?no-inline') format('woff'),
+    url('fonts/vp.svg?no-inline#vp') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;

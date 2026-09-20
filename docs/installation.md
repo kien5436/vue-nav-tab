@@ -1,4 +1,4 @@
-Because this package is built with Composition API, it is required that `Vue.js` from `v3.x` or later.
+Because this package is built with Composition API, it is required that `Vue.js` from `v3.2` or later.
 
 #### CDN
 

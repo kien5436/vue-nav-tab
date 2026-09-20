@@ -1,3 +1,7 @@
+##### Unreleased
+
+- Require `vue@^3.2.0` as peer dependency (the compiled bundles already need Vue 3.2 runtime helpers)
+
 ##### v2.5.1
 
 - Fix tab jumps on activated

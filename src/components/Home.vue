@@ -1,14 +1,14 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 
-import { Tab, createTabs } from "../../lib";
-import HelloWorld from "./HelloWorld.vue";
+import { Tab, createTabs } from '../../lib';
+import HelloWorld from './HelloWorld.vue';
 
 export default defineComponent({
-  name: "Home",
+  name: 'Home',
   setup() {
 
-    const group = "base.home";
+    const group = 'base.home';
     const tabsList: Tab[] = [];
 
     for (let i = 1; 50 > i; i++) {
@@ -32,7 +32,6 @@ export default defineComponent({
   },
 });
 </script>
-
 
 <template>
   <div class="container vp-mx-auto vp-p-3 vp-flex">

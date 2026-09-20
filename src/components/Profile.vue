@@ -1,22 +1,21 @@
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref } from 'vue';
 
-import { refreshTab } from "../../lib/hooks/use-operations";
+import { refreshTab } from '../../lib/hooks/use-operations';
 
 export default defineComponent({
-  name: "Profile",
+  name: 'Profile',
   setup() {
     const count = ref(0);
 
     function refreshThisTab() {
-      refreshTab("base", "profile");
+      refreshTab('base', 'profile');
     }
 
     return { count, refreshThisTab };
   },
 });
 </script>
-
 
 <template>
   <h1>profile page</h1>

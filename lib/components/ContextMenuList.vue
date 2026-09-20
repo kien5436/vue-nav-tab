@@ -1,12 +1,14 @@
 <script lang="ts">
-import { defineComponent, toRefs } from "vue";
+import { PropType, defineComponent } from 'vue';
+
+import type { ContextMenuAction } from '../hooks/use-contextmenu';
 
 export default defineComponent({
-  name: "ContextMenuList",
+  name: 'ContextMenuList',
   props: {
     actions: {
       required: true,
-      type: Array,
+      type: Array as PropType<ContextMenuAction[]>,
     },
     onMenuClick: {
       required: true,

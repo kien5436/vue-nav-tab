@@ -1,11 +1,9 @@
-// eslint-disable-next-line no-unused-vars
 export function debounce <F extends(...args: any[]) => any>(func: F, wait = 250, immediate = false) {
 
   let timeout: ReturnType<typeof setTimeout> | null = null;
 
   function debounced(this: typeof debounced, ...args: Parameters<F>) {
 
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let context: typeof debounced | null = this;
     const previous = Date.now();
 
