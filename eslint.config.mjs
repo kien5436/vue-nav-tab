@@ -50,8 +50,9 @@ export default [
   },
   {
     // `_key` is part of the public tab contract, `_close` is the document-level
-    // click handler and `_tabs` mirrors the internal ref, so these names stay in `lib/`
-    files: ['lib/**/*.ts', 'lib/**/*.vue'],
+    // click handler and `_tabs` mirrors the internal ref, so these names stay in
+    // `lib/` and in `tests/` asserting the contract
+    files: ['lib/**/*.ts', 'lib/**/*.vue', 'tests/**/*.ts'],
     rules: {
       'no-underscore-dangle': [
         'error',

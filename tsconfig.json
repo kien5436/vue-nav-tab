@@ -28,7 +28,8 @@
   },
   "include": [
     "lib/**/*",
-    "src/**/*"
+    "src/**/*",
+    "tests/**/*"
   ],
   "exclude": [
     "dist",
