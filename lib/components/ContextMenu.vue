@@ -44,7 +44,7 @@ export default defineComponent({
       document.removeEventListener('keyup', onKeyUp, false);
       document.removeEventListener('click', _close, false);
       document.removeEventListener('scroll', debouncedClose, false);
-      boundingEl.value.removeEventListener('scroll', debouncedClose, false);
+      boundingEl.value?.removeEventListener('scroll', debouncedClose, false);
       window.removeEventListener('resize', debouncedClose, false);
     });
 

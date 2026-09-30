@@ -1,0 +1,113 @@
+# Test plan
+
+## Purpose and test oracle
+
+This plan covers the public Vue 3 tab API, rendered components, utilities, package output, and the inputs that can reach them. The expected results below are acceptance criteria for future tests; they are **not** a claim that every case currently passes. Use `docs/api.md`, `docs/nav.md`, `docs/options.md`, `docs/tabview.md`, and the TypeScript `Tab` interface in `lib/hooks/use-operations.ts` as the current public contract. Where those sources are silent, prefer the safety invariants below and record any failing case as a product defect or an explicit contract decision.
+
+Priorities: **P0** prevents broken tab state, data loss, or script execution; **P1** covers user-visible behavior and recoverable errors; **P2** covers usability, compatibility, and performance. `Unit` means Vitest with Happy DOM; `browser` means a real browser smoke or interaction test; `package` means a test against the built package rather than source files.
+
+## Setup, fixtures, and shared assertions
+
+- Run from the repository root with `pnpm install --frozen-lockfile`. Use `pnpm test`, `pnpm test:coverage`, `pnpm lint`, and `pnpm typecheck` for source/test changes. For package cases also run `pnpm build` and `pnpm publint`. Run `pnpm dev` and `pnpm preview` for playground smoke checks.
+- Use a fresh, unique group name per case because `createTabs` stores groups at module scope. For tests that intentionally reuse a name, isolate the module registry first. Unmount wrappers and restore timers, document language, body styles, event listeners, and DOM measurement mocks after each case.
+- Base fixture: `a` active and pinned (`closable: false`), `b` and `c` inactive and closable, with simple component views. Add an all-closable fixture, an empty-group fixture, nested groups (`parent`, `parent.child`, `parent.child.leaf`), and two independent groups. Use a stateful view with mount/unmount counters for cache tests and an iframe view for `hasIframe` tests.
+- After every mutating action assert the complete ordered IDs, the active ID, each `active`/`closable` flag, generated `_key`, and the rendered nav/view. For a nonempty usable group there must be exactly one active tab; a pinned tab must survive close operations. Assert that a rejected action leaves the group and rendered DOM unchanged.
+- Use fake timers and advance a controlled `Date.now()` between key-generating actions; use `nextTick()` for Vue updates. Mock `getBoundingClientRect`, client/scroll dimensions, `requestAnimationFrame`, and `DataTransfer` in unit tests. Verify geometry and keyboard behavior in a real browser because Happy DOM cannot prove either.
+- Do not render arbitrary supplied components in the XSS fixtures. Test only string titles, tooltip text, and locale strings as untrusted text; `title`, `view`, and their props can intentionally contain application code and remain the consumer's responsibility.
+
+## Public API and tab state
+
+| ID | Priority / layer | Conditions and action | Expected result |
+| --- | --- | --- | --- |
+| API-01 | P0 / unit | `createTabs` with one active tab and mixed optional flags; inspect the returned array and `useTabs` result. | Same reactive group is observable through both APIs; flags normalize to booleans; each tab has an `id`-based `_key`; caller-owned source objects are not mutated. |
+| API-02 | P0 / unit | `createTabs(group, [])`, then `addTab` once. | The active `_` blank tab appears first, then is replaced by the new active tab; no blank tab remains beside a real tab. |
+| API-03 | P0 / unit | Create a group twice, call `useTabs`/`useCurrentTab` for an unknown group, or create a child before its full parent path exists. | A `VueNavTabError` identifies the offending group; existing groups stay intact. For `parent.child.leaf`, both `parent` and `parent.child` must exist. |
+| API-04 | P0 / unit | Pass a non-array `tabs`, missing `id`/`title`/`view`, `null` entries, `null`/`undefined` fields, non-string or empty IDs, or duplicate IDs. | Reject invalid input with a controlled library error before mutating state; no raw `TypeError` and no ambiguous duplicate tab is rendered. The current interface does not define all of these runtime cases, so failures should trigger validation/contract work. |
+| API-05 | P0 / unit | Initialize zero or multiple `active: true` tabs, including a pinned tab. | With zero active flags, the first tab becomes active; with multiple, the first marked tab stays active and the others become inactive. `useCurrentTab` returns that tab and exactly one view renders. This is a proposed invariant where the current API docs are silent. |
+| API-06 | P1 / unit | Create sibling and nested groups, then use each API on one group. | Only the addressed group changes; another group's IDs, active tab, and rendered view stay unchanged. |
+| API-07 | P0 / unit | Add a new inactive tab, then an active tab. | New tabs append; inactive addition preserves current activation; active addition deactivates the prior current tab and activates the new one. |
+| API-08 | P0 / unit | `addTab` with an existing inactive ID, then the current active ID, using changed title/view/props. | The tab is replaced in place without a duplicate ID; an ordinary replacement preserves its cache key and a current-tab replacement remains active. |
+| API-09 | P1 / unit | Remove a closable tab, then re-add the same ID. | Re-added tab is appended with a new cache key so stale view state is not reused. |
+| API-10 | P0 / unit | Add an invalid tab or add to an unknown group. | Controlled `VueNavTabError`; no partial insertion, deactivation, or change to other groups. |
+| API-11 | P0 / unit | Remove an unknown ID, a pinned tab, an inactive closable tab, the active middle tab, and the active first tab. | Unknown/pinned actions are no-ops; inactive removal preserves activation; active removal selects the previous tab, or the next tab if it was first. |
+| API-12 | P0 / unit | Remove the sole closable tab; invoke close operations when only the blank or pinned tab remains. | The blank tab is the sole active fallback; repeated close operations do not remove it or throw. |
+| API-13 | P0 / unit | `removeAll` with all closable, mixed pinned/closable, and pinned active fixtures. | Only closable tabs are removed; retain an active pinned tab where possible, otherwise activate the first survivor or show the blank fallback. |
+| API-14 | P0 / unit | `removeLeft`, `removeRight`, `removeAbove`, `removeBelow`, `removeOthers` on first/middle/last anchors, with pinned tabs on both sides and the active tab among removed entries. | Only closable tabs in the selected range disappear; aliases match their horizontal operations; anchor and pinned tabs survive; exactly one survivor is active. |
+| API-15 | P1 / unit | Use an unknown anchor for each range/others operation; invoke operations repeatedly on a stable group. | No unrelated tab changes, no duplicate blank tab, and no exception for a no-op. |
+| API-16 | P0 / unit | `refreshTab` on current and inactive tabs, with nested child and similarly prefixed sibling groups (`a.b` and `a.bc`). | Target gets a fresh key and remounts when shown; only true descendant groups are invalidated; unrelated sibling groups remain usable. Unknown target throws a controlled error without state change. |
+| API-17 | P1 / unit | Observe `useTabs` and `useCurrentTab` through add, replace, reorder, activate, and remove. | Consumers see reactive updates in order, with no stale active reference or missing view. |
+| API-18 | P1 / unit | Mount a `KeepAlive` consumer using `onTabActivated`/`onTabDeactivated`, then activate, switch, deactivate, and unmount it. | Hooks fire once for the expected visible tab at the appropriate lifecycle boundary and do not leak callbacks after unmount. |
+
+## Rendered navigation and views
+
+| ID | Priority / layer | Conditions and action | Expected result |
+| --- | --- | --- | --- |
+| UI-01 | P1 / unit + browser | Mount `HTabs` and `VTabs` with the base fixture. | One tab per entry, stable DOM IDs, visible active style, a `tablist`, and the expected horizontal or vertical layout. |
+| UI-02 | P1 / unit | Click inactive, already-active, closable, and pinned tabs. Click the close control inside an inactive tab. | Activation moves once; re-click is a no-op; close removes only closable tabs; close click does not also activate its parent tab. Pinned tabs expose no close control. |
+| UI-03 | P1 / unit + browser | Exercise `HTabs` `tabs`/`pills`, `top`/`bottom`, rounded true/false, and `VTabs` rounded true/false. | Variant classes and borders match props; vertical offsets and horizontal positioning update after add, close, reorder, and width changes without overlap. Invalid enum props produce a Vue validation warning, not corrupt state. |
+| UI-04 | P1 / unit | Render string, component, and VNode titles; pass `titleProps`, `hoverTitle`, and `viewProps`. | Text titles render as text; component titles and views receive their props; tooltip uses `hoverTitle`; a changed view follows the active tab. |
+| UI-05 | P0 / unit | Switch between ordinary views with local state, refresh one, then close and re-add its ID. | Normal switching preserves local state through `KeepAlive`; refresh and re-add mount a fresh instance; only the currently active view is visible. |
+| UI-06 | P1 / unit + browser | Switch between two `hasIframe` views and an ordinary view; refresh or remove an iframe tab. | Previously visited iframe views stay mounted while hidden; only the current iframe is visible; refresh/re-add replaces stale instance; removed iframe content does not remain visible or retain duplicate instances. |
+| UI-07 | P1 / unit | Mount `TabView` for an empty group, then add/remove the last real tab. | Blank view appears only when the blank tab is active; real view renders after add; blank view returns after last close. |
+| UI-08 | P1 / browser | Navigate tabs and menu using keyboard alone, including close and Escape; inspect focus and ARIA state. | Controls are reachable and operable without a mouse, visible focus follows interaction, and the active tab is exposed to assistive technology. Treat missing keyboard or ARIA behavior as an accessibility gap to fix; the existing role attributes alone do not satisfy this case. |
+
+## Drag and drop
+
+| ID | Priority / layer | Conditions and action | Expected result |
+| --- | --- | --- | --- |
+| DND-01 | P1 / unit + browser | Start dragging a tab whose ID contains punctuation or `-tab`. | Transfer payload includes its exact ID and source group; no truncation or ID collision. |
+| DND-02 | P1 / unit + browser | Drag over/drop another tab in the same group, the same tab, an empty nav area, and a child element inside a tab. | Valid pair swaps order once per event and preserves active identity; same-tab/outside actions leave order unchanged; child targets resolve to their containing tab. |
+| DND-03 | P0 / unit | Drag between two groups or use a mismatched `text/vnt-group` value. | Neither group is reordered by the foreign payload. |
+| DND-04 | P0 / unit | Supply missing `dataTransfer`, missing/unknown dragged ID, unknown target ID, malformed DOM ID, or a spoofed same-group payload. | No exception and no insertion of `undefined`, loss of a tab, or cross-group mutation; only IDs present in the addressed group can move. Record any failure as a data-integrity/security defect. |
+| DND-05 | P1 / browser | Reorder first-to-last and last-to-first in both nav orientations, then click/close/refresh the moved tab. | Visual order matches model order, hit targets remain aligned, and later operations still address the intended ID. |
+
+## Context menu, localization, and events
+
+| ID | Priority / layer | Conditions and action | Expected result |
+| --- | --- | --- | --- |
+| MENU-01 | P1 / unit + browser | Right-click first, middle, and last tabs in horizontal and vertical navs. | Menu opens at the pointer, uses left/right or above/below wording as appropriate, and disables impossible edge actions and `Close` for pinned tabs. |
+| MENU-02 | P0 / unit | Invoke each menu action on a mixed pinned/closable fixture; invoke a disabled action. | Reload/close/range/others/all dispatch to the matching public operation; disabled action leaves state unchanged. |
+| MENU-03 | P1 / unit | Open, then click outside, click an item, press Escape, scroll document/nav, resize, and unmount while open. | Menu closes for each dismissal event; component and document listeners are removed on unmount; no console error or later callback touches an unmounted node. |
+| MENU-04 | P1 / browser | Open near each viewport edge and in a scrolled nav. | Menu remains within the visible viewport, does not clip against its nav container, and is focusable without jumping page scroll unexpectedly. |
+| MENU-05 | P1 / unit | Install with no locale options, then full custom locale, then switch `<html lang>` among `en`, `vi`, custom, and unknown codes before opening. | Built-in messages are complete; custom messages appear when selected; unknown language falls back to English; changing language is reflected at the next open. |
+| MENU-06 | P1 / unit | Omit each required locale key in turn, use a non-string value, or pass an invalid locale object. | Installation rejects with a controlled `VueNavTabError` naming the language/key; default locale data is not mutated. |
+| MENU-07 | P0 / unit | Trigger a stale menu action after its tab was removed, or pass an unknown action ID. | No unrelated tab is changed and no uncaught exception occurs; unknown actions are ignored. |
+| MENU-08 | P1 / unit | Rapidly reopen and dismiss the menu while scroll events fire; test `debounce` immediate, trailing, cancel, and recursive callback paths with fake timers. | At most the intended callback executes per burst; cancellation prevents pending execution; no timer or listener remains after teardown. |
+
+## Scrollbars and layout boundaries
+
+| ID | Priority / layer | Conditions and action | Expected result |
+| --- | --- | --- | --- |
+| SCROLL-01 | P1 / unit + browser | For X and Y, test no overflow, exact fit, and content 5× container size; enter/leave with pointer. | Thumb stays hidden without overflow, appears only during hover when needed, and has the expected proportional size. |
+| SCROLL-02 | P1 / unit + browser | Click track at start, middle, and end; drag thumb in both directions and release outside the component. | Scroll offset tracks pointer position within the legal range; `mouseup` stops dragging and restores body text selection. |
+| SCROLL-03 | P1 / unit | Scroll nav through browser input and resize while thumb is visible. | Thumb position updates on animation frame and remains aligned with actual scroll offset; no stale position after content/viewport changes. |
+| SCROLL-04 | P1 / unit + browser | Use zero-width/height measurements, zero scroll extent, negative/out-of-range pointer coordinates, and unmount during a drag. | No `NaN`, `Infinity`, negative thumb size, uncaught exception, stuck global mouse listener, or persistent `user-select: none`. Treat any failure as an edge-case defect. |
+| SCROLL-05 | P2 / browser | Open hundreds of tabs, repeatedly reorder/close them, and resize the nav. | Tab order, hit targets, and scroll controls stay correct; capture interaction timing and memory before/after repeated cycles to spot growth or long stalls. |
+
+## Security and robustness
+
+These are library boundary tests. They do not attempt to sanitize consumer-supplied Vue components or an iframe's remote content.
+
+| ID | Priority / layer | Conditions and action | Expected result |
+| --- | --- | --- | --- |
+| SEC-01 | P0 / unit + browser | Use `<img src=x onerror=...>`, `<script>`, quotes, and HTML entities in string `title`, `hoverTitle`, and locale labels. | They render as inert text/attribute values; no element from the payload is created, no handler runs, and no script executes. |
+| SEC-02 | P0 / unit | Use `__proto__`, `constructor`, `prototype`, `toString`, dotted variants, and an inherited-property object as group and locale keys. | No prototype pollution or mutation of `Object.prototype`; another group's/locale's data cannot be overwritten. Unsafe names are rejected cleanly or stored as own data keys without special behavior. |
+| SEC-03 | P0 / unit | Pass a malformed or forged drag payload containing unknown IDs, another group's IDs, or delimiter-like text. | Order and tab count stay intact; no arbitrary index or foreign group is accessed. |
+| SEC-04 | P0 / unit | Call all public operations with invalid runtime values through `as unknown as` to bypass TypeScript. | Controlled rejection or safe no-op per API contract; no raw property-access exception, partial state change, or executable DOM insertion. |
+| SEC-05 | P1 / browser | Repeatedly open/close menu, drag thumbs, mount/unmount navs, and refresh views. | Global listeners, timers, detached view nodes, and body style changes return to baseline; interaction does not degrade after repeated cycles. |
+| SEC-06 | P1 / package | Inspect packed artifacts and test imports from an isolated consumer. | Beyond package metadata, readme, and license, only declared `dist/` and `types/` files ship; no test fixtures, source maps with secrets, absolute workspace paths, or unexpected runtime dependencies are included. |
+
+## Package and compatibility checks
+
+| ID | Priority / layer | Conditions and action | Expected result |
+| --- | --- | --- | --- |
+| PKG-01 | P0 / package | Build, run `pnpm publint`, inspect ESM, CJS, UMD, declarations, CSS, and font paths; import each declared export path from a temporary consumer. | Declared entry points resolve; Vue stays external; CSS/fonts load relative to the package; declarations resolve; UMD exposes `VueNavTab`; no missing file or accidental source import. |
+| PKG-02 | P0 / package + browser | Install the packed package beside Vue 3.2.x and the repository's current Vue version in isolated consumers. Mount all three exported components and call each public API. | No missing Vue helper/runtime error; basic add/switch/close/view flow works at the documented Vue 3.2+ floor. Keep fixture syntax compatible with Vue 3.2 (no `<script setup>` or `defineModel`). |
+| PKG-03 | P1 / browser | Smoke the playground through `pnpm dev` and built `pnpm preview`; test representative current Chromium, Firefox, and WebKit browsers at narrow and wide widths. | Navigation, menus, dragging, overflow, and views work without console errors or clipping. Record browser/version and viewport for each result. |
+| PKG-04 | P1 / automation | Run `pnpm test:coverage`, `pnpm lint`, and `pnpm typecheck` after test implementation. | All tests pass; coverage meets configured minimums (80% statements, lines, functions; 70% branches); lint reports zero problems; all three TypeScript configurations pass. |
+
+## Implementation order and completion record
+
+1. Add P0 cases around tab invariants and hostile inputs first, then P1 interaction/cleanup cases, then browser/package checks. Put API, drag, menu, component, scrollbar, locale, and utility cases beside the existing matching files in `tests/`; create a separate consumer fixture only for package checks.
+2. For each case record **pass/fail**, command or browser/version, observed result, and issue link. A failing proposed safety or accessibility criterion is a product gap; do not weaken its expected result to match current behavior without updating the public contract.
+3. Release gate: no open P0 failures; all existing and new automated tests green; coverage and lint/typecheck/build/publint gates green; Vue 3.2 consumer smoke passes. Track P1/P2 exceptions explicitly with an owner and follow-up issue.
