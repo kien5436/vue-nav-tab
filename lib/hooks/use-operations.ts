@@ -16,8 +16,8 @@ export interface Tab {
   viewProps?: Record<string, unknown>;
 }
 
-const tabsGroup: { [key: string]: Ref<Tab[]> } = reactive({});
-const removedTabsGroup: { [key: string]: string[] } = {};
+const tabGroups: { [key: string]: Ref<Tab[]> } = reactive({});
+const removedTabGroups: { [key: string]: string[] } = {};
 const BlankTab: Tab = {
   active: true,
   id: '_',
@@ -27,51 +27,66 @@ const BlankTab: Tab = {
 
 export function createTabs(group: string, tabs: Tab[]) {
 
+  const normalizedGroup = group.trim();
+
+  if (normalizedGroup.startsWith('.') || normalizedGroup.endsWith('.') || '' === normalizedGroup)
+    throw new VueNavTabError('Invalid group name');
+
+  if (Object.hasOwn(tabGroups, normalizedGroup))
+    throw new VueNavTabError(`'${group}' group was created. If you want to add more tabs into it, use 'addTab' instead`);
+
   if (!Array.isArray(tabs))
     throw new VueNavTabError("'tabs' must be an array");
 
-  const subGroups = group.split('.');
+  if (normalizedGroup.includes('.')) {
 
-  if (1 < subGroups.length)
+    let subGroup = '';
 
-    for (let i = 0, len = subGroups.length - 1; i < len; i++)
+    for (let i = 0; i < normalizedGroup.length; ++i) {
 
-      if (!Object.hasOwn(tabsGroup, subGroups[i]))
-        throw new VueNavTabError(`'${subGroups[i]}' group is missing while creating nested tabs. Do you forget to create it?`);
+      subGroup += normalizedGroup[i];
 
-  if (Object.hasOwn(tabsGroup, group))
-    throw new VueNavTabError(`'${group}' group was created. If you want to add more tabs into it, use 'addTab' instead`);
+      if (i + 1 < normalizedGroup.length && '.' === normalizedGroup[i + 1] && !Object.hasOwn(tabGroups, subGroup))
+        throw new VueNavTabError(`'${subGroup}' group is missing while creating nested tabs. Do you forget to create it?`);
+    }
+  }
 
   if (tabs.some((_tab) => !isValidTab(_tab)))
     throw new VueNavTabError(MISSING_REQUIRED_PROPS);
 
-  const _tabs = ref<Tab[]>(
-    tabs.map((tab) => ({
-      ...tab,
-      _key: `${tab.id}~`,
-      active: !!tab.active,
-      closable: !!tab.closable,
-      hasIframe: !!tab.hasIframe,
-      title: !isPrimitiveType(tab.title) ? markRaw(tab.title as Component) : tab.title.toString(),
-      view: markRaw(tab.view),
-    })),
-  );
+  const cookedTabs: Tab[] = [...new Map(tabs.map((tab) => [tab.id, tab])).values()].map((tab) => ({
+    ...tab,
+    _key: `${tab.id}~`,
+    active: !!tab.active,
+    closable: !!tab.closable,
+    hasIframe: !!tab.hasIframe,
+    title: !isPrimitiveType(tab.title) ? markRaw(tab.title as Component) : tab.title.toString(),
+    view: markRaw(tab.view),
+  }));
 
-  if (0 === _tabs.value.length)
-    _tabs.value.push(BlankTab);
+  if (0 === cookedTabs.length)
+    cookedTabs.push(BlankTab);
 
-  tabsGroup[group] = _tabs;
-  removedTabsGroup[group] = [];
+  const lastActiveIdex = cookedTabs.findLastIndex((tab) => tab.active);
+  const activeIndex = 0 < lastActiveIdex ? lastActiveIdex : 0;
 
-  return tabsGroup[group] as unknown as Tab[];
+  cookedTabs.forEach((tab, i) => {
+    tab.active = activeIndex === i;
+  });
+
+  tabGroups[normalizedGroup] = ref(cookedTabs);
+  removedTabGroups[normalizedGroup] = [];
+
+  return tabGroups[normalizedGroup] as unknown as Tab[];
 }
 
 export function useTabs(group: string) {
 
-  const tabs = tabsGroup[group];
+  const normalizedGroup = group.trim();
+  const tabs = tabGroups[normalizedGroup];
 
   if (undefined === tabs)
-    throw new VueNavTabError(`Group '${group}' is undefined`);
+    throw new VueNavTabError(`Group '${normalizedGroup}' is undefined`);
 
   return tabs as unknown as Tab[];
 }
@@ -80,20 +95,20 @@ export function useCurrentTab(group: string) {
 
   const tabs = useTabs(group);
 
+  // @todo does it need to be computed?
   return computed(() => tabs.find((tab) => tab.active)) as ComputedRef<Tab>;
 }
 
 /**
  * Add a tab to a group or replace existed one
- * @param group group that tab is added
- * @param tab the tab to be added
  */
 export function addTab(group: string, tab: Tab) {
 
   if (!isValidTab(tab))
     throw new VueNavTabError(MISSING_REQUIRED_PROPS);
 
-  const tabs = useTabs(group);
+  const normalizedGroup = group.trim();
+  const tabs = useTabs(normalizedGroup);
   const cookedTab: Tab = {
     ...tab,
     _key: `${tab.id}~`,
@@ -105,13 +120,13 @@ export function addTab(group: string, tab: Tab) {
   };
   let wasRemoved = false;
 
-  for (let i = removedTabsGroup[group].length; 0 <= --i;)
+  for (let i = removedTabGroups[normalizedGroup].length; 0 <= --i;)
 
-    if (removedTabsGroup[group][i] === tab.id) {
+    if (removedTabGroups[normalizedGroup][i] === tab.id) {
 
       wasRemoved = true;
       cookedTab._key = `${cookedTab.id}~${Date.now()}`;
-      removedTabsGroup[group].splice(i, 1);
+      removedTabGroups[normalizedGroup].splice(i, 1);
 
       break;
     }
@@ -124,7 +139,7 @@ export function addTab(group: string, tab: Tab) {
     return;
   }
 
-  const currentTab = useCurrentTab(group);
+  const currentTab = useCurrentTab(normalizedGroup);
   const idx = tabs.findIndex((_tab) => _tab.id === tab.id);
   const currentTabIdx = tabs.findIndex((_tab) => _tab.id === currentTab.value.id);
 
@@ -147,17 +162,20 @@ export function addTab(group: string, tab: Tab) {
 export function removeTab(group: string, tabId: string) {
 
   const tabs = useTabs(group);
-  const currentTab = useCurrentTab(group);
   const idx = tabs.findIndex((tab) => tab.id === tabId);
-  const currentTabIdx = tabs.findIndex((tab) => tab.id === currentTab.value.id);
 
-  if (0 > idx || !tabs[idx].closable)
+  if (0 > idx)
+    throw new VueNavTabError(`'${tabId}' doesn't exist in group '${group}'`);
+
+  if (!tabs[idx].closable)
     return;
 
-  removedTabsGroup[group].push(tabId);
+  const currentTab = useCurrentTab(group);
+  const currentTabIdx = tabs.findIndex((tab) => tab.id === currentTab.value.id);
+
+  removedTabGroups[group].push(tabId);
 
   if (1 === tabs.length)
-
     tabs.push(BlankTab);
 
   if (idx !== currentTabIdx) {
@@ -174,10 +192,8 @@ export function removeTab(group: string, tabId: string) {
 
     if (0 > prevTabIdx)
       tabs.splice(nextTabIdx, 1, { ...tabs[nextTabIdx], active: true });
-
     else
       tabs.splice(prevTabIdx, 1, { ...tabs[prevTabIdx], active: true });
-
   }
 
   tabs.splice(currentTabIdx, 1);
@@ -193,11 +209,11 @@ export function refreshTab(group: string, tabId: string) {
 
   tabs.splice(selectedTabIdx, 1, { ...tabs[selectedTabIdx], _key: `${tabId}~${Date.now()}` });
 
-  for (const key in tabsGroup)
+  const groupPrefix = `${group.trim()}.`;
 
-    if (Object.hasOwn(tabsGroup, key) && key.startsWith(group) && key !== group)
-      delete tabsGroup[key];
-
+  for (const key in tabGroups)
+    if (Object.hasOwn(tabGroups, key) && key.startsWith(groupPrefix))
+      delete tabGroups[key];
 }
 
 function isPrimitiveType(value: unknown) {
@@ -213,7 +229,12 @@ function isPrimitiveType(value: unknown) {
 }
 
 function isValidTab(tab: Tab) {
-  return Object.hasOwn(tab, 'id') && Object.hasOwn(tab, 'title') && Object.hasOwn(tab, 'view');
+  return (
+    null !== tab && 'object' === typeof tab && !Array.isArray(tab)
+    && Object.hasOwn(tab, 'id') && 'string' === typeof tab.id && '' !== tab.id.trim()
+    && Object.hasOwn(tab, 'title') && null !== tab.title && ('string' === typeof tab.title || 'function' === typeof tab.title || 'object' === typeof tab.title) && !Array.isArray(tab.title)
+    && Object.hasOwn(tab, 'view') && null !== tab.view && ('function' === typeof tab.view || 'object' === typeof tab.view) && !Array.isArray(tab.view)
+  );
 }
 
 export function removeAll(group: string) {
@@ -228,10 +249,9 @@ export function removeAll(group: string) {
     if (tab.closable) {
 
       if (!currentTabIsRemoved)
-
         currentTabIsRemoved = !!tab.active;
 
-      removedTabsGroup[group].push(tab.id);
+      removedTabGroups[group].push(tab.id);
       tabs.splice(i, 1);
       i--;
       len--;
@@ -239,12 +259,9 @@ export function removeAll(group: string) {
   }
 
   if (0 === tabs.length)
-
     tabs.push(BlankTab);
-
   else if (currentTabIsRemoved)
     tabs.splice(0, 1, { ...tabs[0], active: true });
-
 }
 
 export function removeLeft(group: string, tabId: string) {
@@ -253,7 +270,7 @@ export function removeLeft(group: string, tabId: string) {
   let idx = tabs.findIndex((tab) => tab.id === tabId);
 
   if (0 > idx)
-    return;
+    throw new VueNavTabError(`'${tabId}' doesn't exist in group '${group}'`);
 
   let currentTabIsRemoved = false;
 
@@ -267,7 +284,7 @@ export function removeLeft(group: string, tabId: string) {
 
         currentTabIsRemoved = !!tab.active;
 
-      removedTabsGroup[group].push(tab.id);
+      removedTabGroups[group].push(tab.id);
       tabs.splice(i, 1);
       i--;
       idx--;
@@ -275,9 +292,7 @@ export function removeLeft(group: string, tabId: string) {
   }
 
   if (currentTabIsRemoved)
-
     tabs.splice(idx, 1, { ...tabs[idx], active: true });
-
 }
 
 export function removeRight(group: string, tabId: string) {
@@ -286,7 +301,7 @@ export function removeRight(group: string, tabId: string) {
   const idx = tabs.findIndex((tab) => tab.id === tabId);
 
   if (0 > idx)
-    return;
+    throw new VueNavTabError(`'${tabId}' doesn't exist in group '${group}'`);
 
   let currentTabIsRemoved = false;
 
@@ -300,7 +315,7 @@ export function removeRight(group: string, tabId: string) {
 
         currentTabIsRemoved = !!tab.active;
 
-      removedTabsGroup[group].push(tab.id);
+      removedTabGroups[group].push(tab.id);
       tabs.splice(i, 1);
       i--;
       len--;
@@ -308,9 +323,7 @@ export function removeRight(group: string, tabId: string) {
   }
 
   if (currentTabIsRemoved)
-
     tabs.splice(idx, 1, { ...tabs[idx], active: true });
-
 }
 
 export function removeOthers(group: string, tabId: string) {
