@@ -13,7 +13,7 @@ copy-paste gate commands, the expected output for each of them, the Vue compatib
 | --- | --- | --- |
 | 0 | Branch setup + this document | done (commit `e92d379`) |
 | 1 | pnpm migration | done (commit `e92d379`) |
-| 2 | Toolchain migration: Vite 8, TypeScript 5.9, ESLint 9 | gate green, commit pending |
+| 2 | Toolchain migration: Vite 8, TypeScript 5.9, ESLint 9 | done 2026-10-10 (gate green; single-commit rule waived — see Deviations) |
 | 3 | Codebase, tests, CI, docs, release 2.6.0 | not started |
 
 Rule: a phase ends only when its gate is green and exactly one commit exists for it. Never start phase N+1 with a red gate at phase N.
@@ -246,6 +246,11 @@ Format: `command` → observed result.
 - 2026-09-20: `peerDependencies.vue` raised `^3.0.0` → `^3.2.0` (user decision); `docs/installation.md`,
   `README.md` (install section) and `docs/changelog.md` updated to state the 3.2 floor; CI matrix in
   phase 3 narrowed to 3.2.0 → 3.5.43. Re-ran `pnpm install` + full phase 2 gate after the change.
+- 2026-10-10 (phase 2 close-out): `pnpm lint` → 0 problems; `pnpm typecheck` → all three
+  configurations pass; `pnpm build` → `✓ built in 387ms`, `build artifacts verified:
+  index.common.js, index.es.js, index.mjs, vue-nav-tab.umd.js, vue-nav-tab.css,
+  fonts/vp.svg, fonts/vp.ttf, fonts/vp.woff`; `pnpm publint` → exit 0 with only the two
+  residual warnings already documented in Deviations.
 
 ## Deviations
 
@@ -294,3 +299,7 @@ Format: `command` → observed result.
   (`no-unused-expressions`), and `_close`/`_tabs` added to the scoped
   `no-underscore-dangle` allow list (with `allowFunctionParams: true` for the `_tab` callbacks).
   No documented behavior changes.
+- **Phase closed without its single commit.** The status stayed at "commit pending" while test,
+  fix, and docs commits for later work landed on the same branch, so the one-commit-per-phase
+  rule can no longer be satisfied retroactively. Accepted deviation (user decision 2026-10-10):
+  phase 2 is marked done on the strength of the green gate recorded above; no history rewrite.
