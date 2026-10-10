@@ -95,7 +95,6 @@ export function useCurrentTab(group: string) {
 
   const tabs = useTabs(group);
 
-  // @todo does it need to be computed?
   return computed(() => tabs.find((tab) => tab.active)) as ComputedRef<Tab>;
 }
 
@@ -144,7 +143,6 @@ export function addTab(group: string, tab: Tab) {
   const currentTabIdx = tabs.findIndex((_tab) => _tab.id === currentTab.value.id);
 
   if (cookedTab.active && idx !== currentTabIdx)
-
     tabs.splice(currentTabIdx, 1, { ...currentTab.value, active: false });
 
   if (!cookedTab.active && idx === currentTabIdx)

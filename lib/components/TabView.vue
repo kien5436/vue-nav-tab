@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Ref, defineComponent, ref, watch } from 'vue';
+import { Ref, defineComponent, ref, watch, watchEffect } from 'vue';
 
 import { Tab, useCurrentTab } from '../hooks/use-operations';
 
@@ -14,20 +14,20 @@ export default defineComponent({
   setup(props) {
 
     const currentTab = useCurrentTab(props.group);
-    const iframes: Ref<Tab[]> = ref([]);
+    const viewsContainIframe: Ref<Tab[]> = ref([]);
 
-    watch(currentTab, (newVal) => {
+    watchEffect(() => {
 
-      if (newVal.hasIframe && !iframes.value.some((tab) => tab._key === newVal._key)) {
+      if (currentTab.value.hasIframe) {
 
-        iframes.value = iframes.value.filter((tab) => !tab._key?.startsWith(newVal.id + '~'));
-        iframes.value.push(newVal);
+        viewsContainIframe.value = viewsContainIframe.value.filter((tab) => !tab._key?.startsWith(currentTab.value.id + '~'));
+        viewsContainIframe.value.push(currentTab.value);
       }
-    }, { immediate: true });
+    });
 
     return {
       currentTab,
-      iframes,
+      viewsContainIframe,
     };
   },
 });
@@ -36,23 +36,12 @@ export default defineComponent({
 <template>
   <div role="tabpanel" class="vp-box-border">
     <keep-alive>
-      <component
-        v-if="!currentTab.hasIframe"
-        :is="currentTab.view"
-        :key="currentTab._key"
-        v-bind="currentTab.viewProps"
-      />
+      <component v-if="!currentTab.hasIframe" :is="currentTab.view" :key="currentTab._key"
+        v-bind="currentTab.viewProps" />
     </keep-alive>
 
-    <div
-      v-for="tab in iframes"
-      :key="tab._key"
-      v-show="currentTab._key === tab._key"
-    >
-      <component
-        :is="tab.view"
-        v-bind="tab.viewProps"
-      />
+    <div v-for="tab in viewsContainIframe" :key="tab._key" v-show="currentTab._key === tab._key">
+      <component :is="tab.view" v-bind="tab.viewProps" />
     </div>
   </div>
 </template>
