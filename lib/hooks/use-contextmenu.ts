@@ -64,6 +64,18 @@ export function mergeWithDefaultLocales(options: ContextMenuLocale) {
 
       const messages = options[lang];
 
+      if (!messages || 'object' !== typeof messages || Array.isArray(messages))
+        throw new VueNavTabError(`Invalid 'ContextMenuLocaleValue' object. Possible value is {
+            close: string;
+            closeAbove: string;
+            closeAll: string;
+            closeBelow: string;
+            closeLeft: string;
+            closeOthers: string;
+            closeRight: string;
+            reload: string;
+          }`);
+
       for (const prop of requiredProps)
 
         if (!Object.hasOwn(messages, prop) || 'string' !== typeof (messages[prop as keyof ContextMenuLocaleValue]))

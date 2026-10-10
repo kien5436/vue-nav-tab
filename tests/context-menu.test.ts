@@ -1,8 +1,11 @@
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import VueNavTab from '../lib';
 import HTabs from '../lib/components/HTabs.vue';
+import VTabs from '../lib/components/VTabs.vue';
+import { ContextMenuLocale, defaultLocales } from '../lib/hooks/use-contextmenu';
 import { createTabs, useTabs } from '../lib/hooks/use-operations';
 import { makeTab, trackMounted, unmountAll } from './helpers';
 
@@ -173,5 +176,221 @@ describe('context menu', () => {
     await nextTick();
 
     expect(menuDisplay(wrapper)).toContain('display: none');
+  });
+
+  it('MENU-01: uses above/below wording in vertical navs', async () => {
+    seedMenu('mnu-vertical');
+    const wrapper = trackMounted(mount(VTabs, { props: { group: 'mnu-vertical', tabs: useTabs('mnu-vertical') } }));
+
+    await openMenu(wrapper, 'b');
+
+    expect(menuTexts(wrapper)).toEqual([
+      'Reload',
+      'Close',
+      'Close all',
+      'Close others',
+      'Close to the above',
+      'Close to the below',
+    ]);
+  });
+
+  it('MENU-01: disables edge actions on the first and last tabs', async () => {
+    seedMenu('mnu-edges');
+    const wrapper = trackMounted(mount(HTabs, { props: { group: 'mnu-edges', tabs: useTabs('mnu-edges') } }));
+    const actionClass = (text: string) => wrapper.findAll('[role="menuitem"]').find((entry) => text === entry.text())?.classes() ?? [];
+
+    await openMenu(wrapper, 'a');
+    expect(actionClass('Close to the left')).toContain('vp-text-gray-400');
+    expect(actionClass('Close to the right')).not.toContain('vp-text-gray-400');
+
+    await openMenu(wrapper, 'c');
+    expect(actionClass('Close to the right')).toContain('vp-text-gray-400');
+    expect(actionClass('Close to the left')).not.toContain('vp-text-gray-400');
+
+    await openMenu(wrapper, 'b');
+    expect(actionClass('Close to the left')).not.toContain('vp-text-gray-400');
+    expect(actionClass('Close to the right')).not.toContain('vp-text-gray-400');
+  });
+
+  it('MENU-01: opens at the pointer position', async () => {
+    seedMenu('mnu-position');
+    const wrapper = trackMounted(mount(HTabs, { props: { group: 'mnu-position', tabs: useTabs('mnu-position') } }));
+
+    await wrapper.find('#b-tab').trigger('contextmenu', { clientX: 50, clientY: 50 });
+
+    expect(menuDisplay(wrapper)).toContain('display: block');
+    expect(menuDisplay(wrapper)).toContain('50px');
+  });
+
+  it('MENU-03: dismisses on outside click', async () => {
+    seedMenu('mnu-outside');
+    const wrapper = trackMounted(mount(HTabs, { props: { group: 'mnu-outside', tabs: useTabs('mnu-outside') } }));
+
+    await openMenu(wrapper, 'b');
+    expect(menuDisplay(wrapper)).toContain('display: block');
+
+    document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await nextTick();
+
+    expect(menuDisplay(wrapper)).toContain('display: none');
+  });
+
+  it('MENU-03: dismisses on nav scroll', async () => {
+    seedMenu('mnu-navscroll');
+    const wrapper = trackMounted(mount(HTabs, { props: { group: 'mnu-navscroll', tabs: useTabs('mnu-navscroll') } }));
+
+    await openMenu(wrapper, 'b');
+    wrapper.find('.vp-nav').element.dispatchEvent(new Event('scroll'));
+    await nextTick();
+
+    expect(menuDisplay(wrapper)).toContain('display: none');
+  });
+
+  it('MENU-03: dismisses on window resize', async () => {
+    seedMenu('mnu-resize');
+    const wrapper = trackMounted(mount(HTabs, { props: { group: 'mnu-resize', tabs: useTabs('mnu-resize') } }));
+
+    await openMenu(wrapper, 'b');
+    window.dispatchEvent(new Event('resize'));
+    await nextTick();
+
+    expect(menuDisplay(wrapper)).toContain('display: none');
+  });
+
+  it('MENU-03: unmounting while open leaves no live listeners', async () => {
+    seedMenu('mnu-teardown');
+    const wrapper = trackMounted(mount(HTabs, { props: { group: 'mnu-teardown', tabs: useTabs('mnu-teardown') } }));
+
+    await openMenu(wrapper, 'b');
+    wrapper.unmount();
+
+    document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    document.dispatchEvent(new Event('scroll'));
+    document.dispatchEvent(new KeyboardEvent('keyup', { code: 'Escape' }));
+    await nextTick();
+  });
+
+  const de: ContextMenuLocale['de'] = {
+    close: 'Schließen',
+    closeAbove: 'Oben schließen',
+    closeAll: 'Alle schließen',
+    closeBelow: 'Unten schließen',
+    closeLeft: 'Links schließen',
+    closeOthers: 'Andere schließen',
+    closeRight: 'Rechts schließen',
+    reload: 'Neu laden',
+  };
+
+  function setLang(lang: string) {
+    document.documentElement.lang = lang;
+  }
+
+  function mountWithLocales(group: string, options: ContextMenuLocale) {
+    return trackMounted(mount(HTabs, {
+      global: { plugins: [[VueNavTab, options]] },
+      props: { group, tabs: useTabs(group) },
+    }));
+  }
+
+  it('MENU-05: shows vi messages and falls back to English for unknown codes', async () => {
+    const previousLang = document.documentElement.lang;
+
+    try {
+      seedMenu('mnu-vi');
+      const wrapper = mountWithLocales('mnu-vi', {});
+
+      setLang('vi');
+      await openMenu(wrapper, 'b');
+      expect(menuTexts(wrapper)).toEqual([
+        'Tải lại',
+        'Đóng',
+        'Đóng tất cả',
+        'Đóng các thẻ khác',
+        'Đóng các thẻ bên trái',
+        'Đóng các thẻ bên phải',
+      ]);
+
+      setLang('xx');
+      await openMenu(wrapper, 'b');
+      expect(menuTexts(wrapper)).toEqual([
+        'Reload',
+        'Close',
+        'Close all',
+        'Close others',
+        'Close to the left',
+        'Close to the right',
+      ]);
+    }
+    finally {
+      setLang(previousLang);
+    }
+  });
+
+  it('MENU-05: shows custom messages and picks up language changes at the next open', async () => {
+    const previousLang = document.documentElement.lang;
+
+    try {
+      seedMenu('mnu-custom');
+      const wrapper = mountWithLocales('mnu-custom', { de });
+
+      setLang('en');
+      await openMenu(wrapper, 'b');
+      expect(menuTexts(wrapper)[1]).toBe(defaultLocales.en.close);
+
+      setLang('de');
+      await openMenu(wrapper, 'b');
+      expect(menuTexts(wrapper)).toEqual([
+        'Neu laden',
+        'Schließen',
+        'Alle schließen',
+        'Andere schließen',
+        'Links schließen',
+        'Rechts schließen',
+      ]);
+    }
+    finally {
+      setLang(previousLang);
+    }
+  });
+
+  it('MENU-07: ignores an unknown action id', async () => {
+    seedMenu('mnu-unknown');
+    const wrapper = trackMounted(mount(HTabs, { props: { group: 'mnu-unknown', tabs: useTabs('mnu-unknown') } }));
+
+    await openMenu(wrapper, 'b');
+    (wrapper.vm as unknown as { onMenuClick(id: string): void }).onMenuClick('bogus');
+    await nextTick();
+
+    expect(tabIds('mnu-unknown')).toEqual(['a', 'b', 'c']);
+  });
+
+  it('MENU-08: survives rapid reopen and dismiss across scroll bursts', async () => {
+    vi.useFakeTimers();
+
+    try {
+      seedMenu('mnu-rapid');
+      const wrapper = trackMounted(mount(HTabs, { props: { group: 'mnu-rapid', tabs: useTabs('mnu-rapid') } }));
+
+      async function reopenAndDismiss() {
+        await openMenu(wrapper, 'b');
+        expect(menuDisplay(wrapper)).toContain('display: block');
+
+        document.dispatchEvent(new Event('scroll'));
+        await nextTick();
+        expect(menuDisplay(wrapper)).toContain('display: none');
+
+        vi.advanceTimersByTime(150);
+      }
+
+      await reopenAndDismiss();
+      await reopenAndDismiss();
+      await reopenAndDismiss();
+
+      await wrapper.find('#b-tab').trigger('click');
+      expect(tabIds('mnu-rapid')).toEqual(['a', 'b', 'c']);
+    }
+    finally {
+      vi.useRealTimers();
+    }
   });
 });

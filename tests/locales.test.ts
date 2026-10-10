@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import VueNavTabError from '../lib/utils/error';
-import { defaultLocales, mergeWithDefaultLocales } from '../lib/hooks/use-contextmenu';
+import { ContextMenuLocale, defaultLocales, mergeWithDefaultLocales } from '../lib/hooks/use-contextmenu';
 
 const REQUIRED_KEYS = [
   'close',
@@ -58,6 +58,31 @@ describe('mergeWithDefaultLocales', () => {
     catch (error) {
       expect(error).toBeInstanceOf(VueNavTabError);
       expect((error as Error).message).toContain('\'reload\' is missing from \'options.fr\'');
+    }
+  });
+
+  it.each([...REQUIRED_KEYS])('MENU-06: rejects a language missing %s', (key) => {
+    const messages = { ...defaultLocales.en };
+
+    delete messages[key as keyof typeof messages];
+
+    try {
+      mergeWithDefaultLocales({ fr: messages });
+      expect.unreachable();
+    }
+    catch (error) {
+      expect(error).toBeInstanceOf(VueNavTabError);
+      expect((error as Error).message).toContain(`'${key}' is missing from 'options.fr'`);
+    }
+  });
+
+  it('MENU-06: rejects a null language object with a controlled error', () => {
+    try {
+      mergeWithDefaultLocales({ fr: null as unknown as ContextMenuLocale['fr'] });
+      expect.unreachable();
+    }
+    catch (error) {
+      expect(error).toBeInstanceOf(VueNavTabError);
     }
   });
 });

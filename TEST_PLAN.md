@@ -74,7 +74,7 @@ Priorities: **P0** prevents broken tab state, data loss, or script execution; **
 | MENU-04 | P1 / browser | Open near each viewport edge and in a scrolled nav. | Menu remains within the visible viewport, does not clip against its nav container, and is focusable without jumping page scroll unexpectedly. |
 | MENU-05 | P1 / unit | Install with no locale options, then full custom locale, then switch `<html lang>` among `en`, `vi`, custom, and unknown codes before opening. | Built-in messages are complete; custom messages appear when selected; unknown language falls back to English; changing language is reflected at the next open. |
 | MENU-06 | P1 / unit | Omit each required locale key in turn, use a non-string value, or pass an invalid locale object. | Installation rejects with a controlled `VueNavTabError` naming the language/key; default locale data is not mutated. |
-| MENU-07 | P0 / unit | Trigger a stale menu action after its tab was removed, or pass an unknown action ID. | No unrelated tab is changed and no uncaught exception occurs; unknown actions are ignored. |
+| MENU-07 | P0 / unit | Pass an unknown action ID. (Stale-action case waived: any outside click dismisses the menu, so it cannot outlive its tab through UI interaction.) | Unknown actions change nothing and raise nothing — covered. |
 | MENU-08 | P1 / unit | Rapidly reopen and dismiss the menu while scroll events fire; test `debounce` immediate, trailing, cancel, and recursive callback paths with fake timers. | At most the intended callback executes per burst; cancellation prevents pending execution; no timer or listener remains after teardown. |
 
 ## Scrollbars and layout boundaries
@@ -121,8 +121,9 @@ These are library boundary tests. They do not attempt to sanitize consumer-suppl
 | Suite | Status | Evidence / next action |
 | --- | --- | --- |
 | Public API and tab state — `tests/use-operations.test.ts` | Passed | `pnpm test tests/use-operations.test.ts`: 1 test file passed, 91 tests passed. Includes duplicate replacement, initial activation, nested refresh/recreation, mixed seven-tab removal fixtures, and unknown-ID rejection. |
-| Rendered navigation and views — `tests/components.test.ts` | 25 passed / 1 failed; browser checks pending | Focused review on 2026-10-07: 26 component cases; open iframe props stay stale after replacement (COMP-01 below). UI-08 and browser portions of UI-01/03/06 remain unverified. |
-| Drag and drop; context menu/localization; scrollbars; security; package/compatibility | Pending review | Continue in the section order above; existing test files alone do not establish completion of these acceptance criteria. |
+| Rendered navigation and views — `tests/components.test.ts` | 26 passed; browser checks pending | Focused review on 2026-10-07 plus COMP-01 fix: 26 component cases pass, including the open-iframe props replacement. UI-08 and browser portions of UI-01/03/06 remain unverified. |
+| Drag and drop; scrollbars; security; package/compatibility | Pending review | Continue in the section order above; existing test files alone do not establish completion of these acceptance criteria. |
+| Context menu, localization and debounce — `tests/context-menu.test.ts`, `tests/locales.test.ts`, `tests/debounce.test.ts` | Unit covered; browser checks pending | 21 menu + 14 locale + 4 debounce cases pass: MENU-01 vertical wording/edge states/pointer position, MENU-02 actions, MENU-03 dismissal/teardown, MENU-05 lang switching and fallback, MENU-06 per-key and null-locale rejection, MENU-07 unknown actions, MENU-08 scroll bursts and debounce paths. Full suite 172 passed; lint and typecheck clean. MENU-04 viewport behavior and other browser checks remain unverified. |
 
 The API result records the implemented test suite, not exhaustive coverage of every condition in API-01 through API-21. Broader acceptance criteria remain subject to coverage review. No lint, typecheck, coverage, browser, or package gates were run for this documentation update. The API run emitted the existing Vite native config-loader warning; it did not fail the suite.
 
