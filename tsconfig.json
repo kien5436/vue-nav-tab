@@ -14,11 +14,6 @@
     "types": [
       "vite/client"
     ],
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    },
     "lib": [
       "esnext",
       "dom",
@@ -28,7 +23,6 @@
   },
   "include": [
     "lib/**/*",
-    "src/**/*",
     "tests/**/*"
   ],
   "exclude": [

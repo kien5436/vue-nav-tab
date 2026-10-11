@@ -1,8 +1,5 @@
 const content = ['./lib/**/*.{vue,js,ts}'];
 
-if ('production' !== process.env.NODE_ENV)
-  content.push('./src/**/*.{vue,ts}');
-
 /** @type import("tailwindcss/tailwind-config").TailwindConfig */
 module.exports = {
   content,

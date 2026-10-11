@@ -23,12 +23,12 @@ exists for it.
 | --- | --- | --- | --- |
 | 0 | Branch + plan document | `git log --oneline -3` | done (`e92d379`) |
 | 1 | yarn → pnpm | `pnpm install --frozen-lockfile` | done (`e92d379`) |
-| 2 | Rollup → Vite 8, TS 5.9, ESLint 9 | `pnpm lint`, `pnpm typecheck`, `pnpm build`, `pnpm publint`, `pnpm dev` | gate green, **commit pending** |
-| 3 | Playground, tests, CI, docs, 2.6.0 | `pnpm test`, `pnpm test:coverage` | not started |
+| 2 | Rollup → Vite 8, TS 5.9, ESLint 9 | `pnpm lint`, `pnpm typecheck`, `pnpm build`, `pnpm publint` | gate green, **commit pending** |
+| 3 | Tests, CI, docs, 2.6.0 | `pnpm test`, `pnpm test:coverage` | not started |
 
 There is **no test suite yet**. `pnpm test` does not exist until phase 3, so "the migration passes"
 today means: reproducible install, lint clean, types clean, build emits the frozen artifact set,
-`publint` exits 0, the playground compiles and serves, and a packed tarball works in a fresh
+`publint` exits 0, and a packed tarball works in a fresh
 consumer project.
 
 ## 2. Prerequisites
@@ -173,38 +173,6 @@ CI=true pnpm publint
 
 Expected: `Running publint v0.3.24 for vue-nav-tab...`, exit code 0, two warnings and three
 suggestions — all documented in section 10. Warnings are not failures; a non-zero exit is.
-
-### 6.6 Playground / dev server
-
-The playground still runs on vue-cli in phase 2; phase 3 replaces it with Vite.
-
-```bash
-CI=true pnpm dev
-```
-
-Expected:
-
-```
- INFO  Starting development server...
- DONE  Compiled successfully in …ms
-  App running at:
-  - Local:   http://localhost:8080/
-```
-
-Then verify it actually serves, in a second terminal:
-
-```bash
-curl -s -o /tmp/vnt-dev.html -w "HTTP %{http_code}\n" http://localhost:8080/
-grep -o 'id="app"' /tmp/vnt-dev.html
-```
-
-Expected: `HTTP 200` and `id="app"`. Stop the server with `Ctrl-C`. If it was started in the
-background, confirm the port is closed afterwards:
-
-```bash
-pkill -f "vue-cli-service serve"
-curl -s -o /dev/null -w "%{http_code}\n" --max-time 3 http://localhost:8080/   # expect 000
-```
 
 ## 7. Packaging surface — what consumers receive
 
@@ -415,7 +383,6 @@ Do not "fix" these; they are accepted and documented in the plan's Deviations se
 | `ENOTFOUND` / `EAI_AGAIN` on install, then an empty `node_modules` | No network (sandbox or offline). Re-run the install outside the sandbox — the lockfile is authoritative, nothing is lost |
 | `sh: eslint: command not found` (or `vite`, `vue-tsc`) | `node_modules` is empty/incomplete: run `CI=true pnpm install --frozen-lockfile` |
 | `TypeError: Cannot read properties of undefined (reading '$el')` in SSR | Same class of issue as the SSR watcher above: `HTabs` needs DOM measurement. Test via a browser/consumer build, not `renderToString` alone |
-| Dev server port already in use | A previous `pnpm dev` is still running: `pkill -f "vue-cli-service serve"` |
 | Dev server crashes with an ESLint `extensions` option error | `@vue/cli-plugin-eslint` passes a removed ESLint 9 option; `vue.config.js` deliberately sets `lintOnSave: false` until phase 3 deletes vue-cli |
 | `vue-tsc: command not found` only in a fixture | Install the fixture's own devDependencies and invoke through `pnpm exec`, not a bare binary |
 
@@ -483,4 +450,3 @@ When phase 3 lands, extend this guide with:
   thresholds taken from the plan).
 - The dist/artifact suite and the packed-tarball fixture test that replace the manual section 8.
 - The CI matrix (Node 22 × Vue versions) and its expected job names.
-- The Vite playground (`pnpm dev` → `vite`, `pnpm preview` → `vite preview`) once vue-cli is gone.

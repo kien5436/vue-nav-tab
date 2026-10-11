@@ -137,7 +137,7 @@ Pins: `vite@8.3.0`, `@vitejs/plugin-vue@6.0.9`, `vue@3.5.43`, `vue-tsc@3.3.11`,
   `vite.config.ts`; `tsconfig.build.json` with `rootDir: lib`, `declarationDir: types`,
   `emitDeclarationOnly` so `vue-tsc` regenerates `types/index.d.ts` + `types/**/*.vue.d.ts`. Add
   `lib/style.css.d.ts` so the emitted `import "./style.css"` line in `types/index.d.ts` resolves for
-  consumers. `typecheck` = `vue-tsc --noEmit` over lib/src/tests + `vue-tsc -p tsconfig.build.json`.
+  consumers. `typecheck` = `vue-tsc --noEmit` over lib/tests + `vue-tsc -p tsconfig.build.json`.
 - ESLint 9 flat `eslint.config.mjs` extending `eslint-config-pk@2`, then run `pnpm lint --fix`
   repo-wide and adopt pk 2 formatting fully (single quotes, `curly`, `eol-last`, sorting). The ~526
   expected findings are accepted churn in this commit.
@@ -151,10 +151,6 @@ Pins: `vite@8.3.0`, `@vitejs/plugin-vue@6.0.9`, `vue@3.5.43`, `vue-tsc@3.3.11`,
 
 ## Phase 3 — codebase, tests, CI, docs, release (commit 3)
 
-- Playground: replace vue-cli with Vite — add root `index.html` loading `/src/main.ts`, keep `src/`
-  and `public/`, delete `vue.config.js`, `babel.config.js`, `public/index.html` and the
-  `@vue/cli-*`, `core-js`, `vue-cli-plugin-tailwind`, `@types/webpack-env`, `cross-env`
-  dependencies. Scripts: `dev: vite`, `preview: vite preview`.
 - Vitest 4.1.11 + `@vitest/coverage-v8` + `@vue/test-utils` 2.5.1; `vitest.config.ts` with
   `environment: happy-dom` and coverage thresholds 80 statements / 80 lines / 80 functions /
   70 branches, excluding only `lib/shims-vue.d.ts` and `lib/style.css.d.ts`.
@@ -188,7 +184,7 @@ Pins: `vite@8.3.0`, `@vitejs/plugin-vue@6.0.9`, `vue@3.5.43`, `vue-tsc@3.3.11`,
   this file.
 - Gate: `lint`, `typecheck`, `test`, `build`, `publint`, `verify:package` all green; update Status
   and Verification log here.
-- Commit message: `feat: support any vue 3 project, vite playground, tests and ci`.
+- Commit message: `feat: support any vue 3 project, tests and ci`.
 
 ## Test plan / acceptance criteria
 

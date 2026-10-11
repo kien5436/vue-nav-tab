@@ -30,8 +30,7 @@ Run the gates that cover your change; quote observed output, never assert from m
 | --- | --- |
 | Any | `pnpm lint`, `pnpm typecheck` |
 | `lib/`, tests | `pnpm test`, `pnpm test:coverage` (thresholds: 80 stmts / 80 lines / 80 funcs / 70 branches) |
-| Build/packaging | `pnpm build`, `pnpm publint` |
-| Playground | `pnpm dev` serves, `pnpm preview` works |
+| Build/packaging | `pnpm build`, `pnpm publint`, `pnpm verify:package` |
 
 `dist/` and `types/` are gitignored build output — never commit them.
 

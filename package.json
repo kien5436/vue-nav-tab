@@ -1,19 +1,19 @@
 {
   "name": "vue-nav-tab",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "description": "Tab components for Vue.js project",
   "author": "Phạm Trung Kiên",
   "scripts": {
-    "dev": "vite",
-    "preview": "vite preview",
     "build": "vite build && node scripts/postbuild.mjs",
     "docs": "docsify serve docs",
     "lint": "eslint . --fix",
-    "prepublishOnly": "pnpm build",
+    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm verify:package",
     "publint": "publint",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "vue-tsc --noEmit && vue-tsc --noEmit -p tsconfig.node.json && vue-tsc -p tsconfig.build.json"
+    "typecheck": "vue-tsc --noEmit && vue-tsc --noEmit -p tsconfig.node.json && vue-tsc -p tsconfig.build.json",
+    "verify:consumer-browser": "node scripts/verify-consumer-browser.mjs",
+    "verify:package": "node scripts/verify-package.mjs"
   },
   "main": "dist/index.common.js",
   "module": "dist/index.es.js",
