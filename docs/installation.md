@@ -1,19 +1,10 @@
-Because this package is built with Composition API, it is required that `Vue.js` from `v3.2` or later.
+This package is built with the Composition API and requires `Vue.js` v3.2 or later.
 
-#### CDN
+#### Package manager
 
-This package is available in [unkpg](https://unpkg.com) and [jsdelivr](https://www.jsdelivr.com)
-
-```html
-<!-- vuejs -->
-<script src="https://unpkg.com/vue@3"></script>
-<!-- unpkg -->
-<script src="https://unpkg.com/vue-nav-tab"></script>
-<!-- jsdelivr -->
-<script src="https://cdn.jsdelivr.net/npm/vue-nav-tab"></script>
+```sh
+pnpm add vue-nav-tab
 ```
-
-#### Yarn (recommend) or npm
 
 ```sh
 yarn add vue-nav-tab
@@ -21,4 +12,19 @@ yarn add vue-nav-tab
 
 ```sh
 npm i vue-nav-tab
+```
+
+#### CDN
+
+This package is available on [unpkg](https://unpkg.com) and [jsdelivr](https://www.jsdelivr.com).
+
+```html
+<!-- vuejs -->
+<script src="https://unpkg.com/vue@3"></script>
+<!-- unpkg -->
+<script src="https://unpkg.com/vue-nav-tab"></script>
+<link rel="stylesheet" href="https://unpkg.com/vue-nav-tab/style.css">
+<!-- jsdelivr -->
+<script src="https://cdn.jsdelivr.net/npm/vue-nav-tab"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-nav-tab/style.css">
 ```

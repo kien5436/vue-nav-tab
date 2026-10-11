@@ -1,6 +1,12 @@
-##### Unreleased
+
+##### v2.5.2 — 2026-10-11
 
 - Require `vue@^3.2.0` as peer dependency (the compiled bundles already need Vue 3.2 runtime helpers)
+- Fix iframe view props sync when the app replaces props
+- Guard against null/invalid locale objects
+- Cover menu, locale, debounce, scrollbar, and drag'n'drop with unit tests
+- Add `verify:package` gate plus browser consumer fixture
+- Remove the playground; verify releases through the packed tarball instead
 
 ##### v2.5.1
 

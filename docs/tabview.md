@@ -9,4 +9,4 @@
 - Required
 - Type: `string`
 
-`group` is corresponding to tabs's `group` so that it knows which view to be displayed.
+`group` corresponds to the tabs's `group` so that it knows which view to display.

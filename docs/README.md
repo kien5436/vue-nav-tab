@@ -1,4 +1,6 @@
-# vue-nav-tab
+# vue-nav-tab 
+
+<p align="center"><img src="/_media/stacked-black.svg" width="480" alt="vue-nav-tab logo"></p>
 
 Tab components for Vue.js project
 
@@ -19,6 +21,8 @@ Tab components for Vue.js project
 ## Installation
 
 ```sh
+pnpm add vue-nav-tab
+# or
 yarn add vue-nav-tab
 # or
 npm i vue-nav-tab

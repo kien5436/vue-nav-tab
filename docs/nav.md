@@ -15,7 +15,7 @@ There are two types of navbar: horizontal and vertical.
 - Required
 - Type: `string`
 
-A tab must belong to a group. If your page contains multiple tabs or has nested tabs, it can determine which tab to interact with.
+A tab must belong to a group. If your page contains multiple tabs or nested tabs, the group helps determine which tab to interact with.
 
 ##### tabs
 
@@ -115,7 +115,7 @@ Set navbar **border** is above or below tab view. Don't be confused that it will
 - Type: `boolean`
 - Default: `false`
 
-If set to `true`, the tab will have rounded border like Chrome tab
+If set to `true`, the tab will have rounded border like Chrome's tab
 
 <div
   class="vp-overflow-hidden vp-h-10 vp-relative before:vp-bottom-px before:vp-content-[''] before:vp-block before:vp-absolute before:vp-left-0 before:vp-w-full before:vp-h-px before:vp-bg-gray-300">

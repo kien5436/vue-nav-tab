@@ -3,19 +3,19 @@
 #### Prerequisites
 
 - You are familiar with `Vue.js` and `Vue Single-File Components`.
-- This guide will use `ES modules` syntax for consistency. If you don't know about it, don't worry, you can start with [vue-cli](https://cli.vuejs.org/guide/installation.html), it will setup necessary things for your project.
+- This guide will use `ES modules` syntax for consistency. If you don't know about it, don't worry, you can start with [vite](https://vite.dev/guide/), it will setup necessary things for your project.
 
 #### [Live demo](https://codesandbox.io/s/vue-nav-tab-2-example-xmvlip)
 
 #### Quick example
 
-Now, I assume that you use `vue-cli` to create project. Let's modify something.
+Now, I assume that you use `vite` to create project. Let's modify something.
 
 `main.js`
 
 ```js
 import { createApp } from 'vue';
-import 'vue-nav-tab/dist/vue-nav-tab.css';
+import 'vue-nav-tab/style.css';
 import VueNavTab from 'vue-nav-tab';
 
 import App from './App.vue';
@@ -165,4 +165,4 @@ export default {
 </template>
 ```
 
-Open a terminal/cmd, type `npm run serve` and see the result in browser.
+Open a terminal in your project, type `pnpm dev` and see the result in browser.
