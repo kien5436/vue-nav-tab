@@ -2,7 +2,7 @@ import { defineComponent, h } from 'vue';
 import { describe, expect, it, vi } from 'vitest';
 
 import useDragDrop from '../lib/hooks/use-drag-n-drop';
-import { createTabs, Tab, useTabs } from '../lib/hooks/use-operations';
+import { createTabs, Tab, useCurrentTab, useTabs } from '../lib/hooks/use-operations';
 
 const stubView = defineComponent({ name: 'StubView', render: () => h('p', 'stub') });
 
@@ -133,5 +133,129 @@ describe('useDragDrop', () => {
     drop(event);
 
     expect(orderOf('dd-drop-foreign')).toEqual(['a', 'b', 'c']);
+  });
+
+  it.each(['x-tab', 'a.b-c', 'sp ace'])('DND-01: stores punctuated id %s exactly on drag start', (id) => {
+    const group = `dd-punct-${id.replace(/[^a-z]/gi, '')}`;
+
+    seedGroup(group);
+    const transfer = mockTransfer('', '');
+    const { dragStart } = useDragDrop(group);
+
+    dragStart(dragEvent(itemEl(id), transfer));
+
+    expect(transfer.setData).toHaveBeenCalledWith('text/plain', id);
+  });
+
+  it('DND-02: resolves a child element to its containing tab', () => {
+    seedGroup('dd-child');
+    const { dragOver } = useDragDrop('dd-child');
+    const item = itemEl('c');
+    const child = document.createElement('span');
+
+    item.appendChild(child);
+    dragOver(dragEvent(child, mockTransfer('dd-child', 'a')));
+
+    expect(orderOf('dd-child')).toEqual(['c', 'b', 'a']);
+  });
+
+  it('DND-02: preserves the active tab across a swap', () => {
+    seedGroup('dd-active');
+    const { drop } = useDragDrop('dd-active');
+
+    drop(dragEvent(itemEl('c'), mockTransfer('dd-active', 'a')));
+
+    expect(orderOf('dd-active')).toEqual(['c', 'b', 'a']);
+    expect(useCurrentTab('dd-active').value.id).toBe('a');
+  });
+
+  it('DND-04: tolerates a missing dataTransfer', () => {
+    seedGroup('dd-nodt');
+    const { dragOver, drop } = useDragDrop('dd-nodt');
+    const bare = (target: EventTarget) => ({ preventDefault: vi.fn(), target }) as unknown as DragEvent;
+
+    expect(() => {
+      dragOver(bare(itemEl('c')));
+      drop(bare(itemEl('c')));
+    }).not.toThrow();
+    expect(orderOf('dd-nodt')).toEqual(['a', 'b', 'c']);
+  });
+
+  // Known defect: findIndex returns -1 and the swap writes undefined into the tab array.
+  it.fails('DND-04: rejects an unknown dragged id on dragOver', () => {
+    const group = 'dd-baddrag-dragOver';
+
+    seedGroup(group);
+    const api = useDragDrop(group);
+
+    api.dragOver(dragEvent(itemEl('c'), mockTransfer(group, 'ghost')));
+
+    expect(orderOf(group)).toEqual(['a', 'b', 'c']);
+  });
+
+  // Known defect: findIndex returns -1 and the swap writes undefined into the tab array.
+  it.fails('DND-04: rejects an unknown dragged id on drop', () => {
+    const group = 'dd-baddrag-drop';
+
+    seedGroup(group);
+    const api = useDragDrop(group);
+
+    api.drop(dragEvent(itemEl('c'), mockTransfer(group, 'ghost')));
+
+    expect(orderOf(group)).toEqual(['a', 'b', 'c']);
+  });
+
+  // Known defect: findIndex returns -1 and the swap writes undefined into the tab array.
+  it.fails('DND-04: rejects an unknown target id on dragOver', () => {
+    const group = 'dd-badtarget-dragOver';
+
+    seedGroup(group);
+    const api = useDragDrop(group);
+
+    api.dragOver(dragEvent(itemEl('ghost'), mockTransfer(group, 'a')));
+
+    expect(orderOf(group)).toEqual(['a', 'b', 'c']);
+  });
+
+  // Known defect: findIndex returns -1 and the swap writes undefined into the tab array.
+  it.fails('DND-04: rejects an unknown target id on drop', () => {
+    const group = 'dd-badtarget-drop';
+
+    seedGroup(group);
+    const api = useDragDrop(group);
+
+    api.drop(dragEvent(itemEl('ghost'), mockTransfer(group, 'a')));
+
+    expect(orderOf(group)).toEqual(['a', 'b', 'c']);
+  });
+
+  // Known defect: findIndex returns -1 and the swap writes undefined into the tab array.
+  it.fails('DND-04: rejects a malformed target DOM id on dragOver', () => {
+    const group = 'dd-baddom-dragOver';
+
+    seedGroup(group);
+    const api = useDragDrop(group);
+    const malformed = document.createElement('div');
+
+    malformed.className = 'vp-item';
+    malformed.id = 'oops';
+    api.dragOver(dragEvent(malformed, mockTransfer(group, 'a')));
+
+    expect(orderOf(group)).toEqual(['a', 'b', 'c']);
+  });
+
+  // Known defect: findIndex returns -1 and the swap writes undefined into the tab array.
+  it.fails('DND-04: rejects a malformed target DOM id on drop', () => {
+    const group = 'dd-baddom-drop';
+
+    seedGroup(group);
+    const api = useDragDrop(group);
+    const malformed = document.createElement('div');
+
+    malformed.className = 'vp-item';
+    malformed.id = 'oops';
+    api.drop(dragEvent(malformed, mockTransfer(group, 'a')));
+
+    expect(orderOf(group)).toEqual(['a', 'b', 'c']);
   });
 });
