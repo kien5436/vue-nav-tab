@@ -1,0 +1,42 @@
+name: publish
+
+'on':
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Test with coverage
+        run: pnpm test:coverage
+      - name: Build
+        run: pnpm build
+      - name: Publint
+        run: pnpm publint
+      - name: Verify package
+        run: pnpm verify:package
+      - name: Update npm for trusted publishing
+        run: npm install -g npm@latest
+      - name: Publish to npm
+        run: pnpm publish --provenance --access public
