@@ -39,4 +39,4 @@ jobs:
       - name: Update npm for trusted publishing
         run: npm install -g npm@latest
       - name: Publish to npm
-        run: pnpm publish --provenance --access public
+        run: pnpm publish --provenance --access public --no-git-checks
